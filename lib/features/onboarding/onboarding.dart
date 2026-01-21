@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:try_my_tracker/core/routes/app_routes.dart';
+import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
+
+class Onboarding extends StatelessWidget {
+  const Onboarding({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Spacer(),
+            Image.asset('assets/images/app_logo.png'),
+            SizedBox(height: 32.h),
+            Text(
+              'PERFORMANCE',
+              style: GoogleFonts.spaceGrotesk(
+                letterSpacing: 3.5,
+                fontWeight: FontWeight.bold,
+                fontSize: 40.sp,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              'LAB',
+              style: GoogleFonts.spaceGrotesk(
+                letterSpacing: 3.5,
+                fontWeight: FontWeight.bold,
+                fontSize: 40.sp,
+                color: AppColors.primary,
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    thickness: 0.5.w,
+                    color: AppColors.textSecondary,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                ),
+                Text(
+                  'Trackr, Anlyze, Improve',
+                  style: GoogleFonts.spaceGrotesk(
+                    letterSpacing: 3.5,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    thickness: 0.5.w,
+                    color: AppColors.textSecondary,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: CustomButton(
+                borderradius: 34.r,
+                label: 'Get Started',
+                onPressed: () => Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.onboardinScreens,
+                ),
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+// Navigator.pushNamed(context, AppRoutes.weeklySchedule);
