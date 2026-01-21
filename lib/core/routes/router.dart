@@ -6,8 +6,8 @@ import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/tr
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/exercise/exercise_detail_screen.dart';
 import 'package:try_my_tracker/features/main/main_layout.dart';
-import 'package:try_my_tracker/features/onboarding/Screens/onboardin_Screens.dart';
-import 'package:try_my_tracker/features/onboarding/onboarding.dart';
+import 'package:try_my_tracker/features/onboarding/presentation/screens/welcome_screen.dart';
+import 'package:try_my_tracker/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
 
 class RouteGenerator {
@@ -19,11 +19,11 @@ class RouteGenerator {
       case AppRoutes.mainLayout:
         return MaterialPageRoute(builder: (_) => const MainLayout());
 
-      case AppRoutes.onboardinScreens:
-        return MaterialPageRoute(builder: (_) => const OnboardinScreens());
+      case AppRoutes.welcome:
+        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
 
-      case AppRoutes.onboarding:
-        return MaterialPageRoute(builder: (_) => const Onboarding());
+      case AppRoutes.onboardingSlider:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case AppRoutes.home:
         // For now, home can be TodayWorkout or ProgramList, defaulting to ProgramList based on previous user flow/edits
         // The user last changed home to ProgramListScreen in main.dart

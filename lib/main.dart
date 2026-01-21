@@ -11,7 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize dependency injection
-  // Initialize dependency injection
   await di.init();
 
   runApp(const MyApp());

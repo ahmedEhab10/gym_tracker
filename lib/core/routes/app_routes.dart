@@ -1,9 +1,9 @@
 class AppRoutes {
   static const String splash = '/splash';
-  static const String onboarding = '/onboarding';
-  static const String onboardinScreens = '/OnboardinScreens';
+  static const String welcome = '/welcome';
+  static const String onboardingSlider = '/onboarding-slider';
   static const String home = '/';
-  static const String mainLayout = '/MainLayout';
+  static const String mainLayout = '/main-layout';
 
   static const String programList = '/program-list';
   static const String weeklySchedule = '/weekly-schedule';

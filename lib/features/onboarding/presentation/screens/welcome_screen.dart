@@ -5,8 +5,8 @@ import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 
-class Onboarding extends StatelessWidget {
-  const Onboarding({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Onboarding extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Spacer(),
+            const Spacer(),
             Image.asset('assets/images/app_logo.png'),
             SizedBox(height: 32.h),
             Text(
@@ -46,7 +46,7 @@ class Onboarding extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Trackr, Anlyze, Improve',
+                  'Track, Analyze, Improve',
                   style: GoogleFonts.spaceGrotesk(
                     letterSpacing: 3.5,
                     fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class Onboarding extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: CustomButton(
@@ -76,15 +76,10 @@ class Onboarding extends StatelessWidget {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),
     );
   }
 }
-
-
-// Navigator.pushNamed(context, AppRoutes.weeklySchedule);
-
-/////////

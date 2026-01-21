@@ -42,6 +42,8 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
 
   Future<void> navigateToHome() async {
     await Future.delayed(const Duration(seconds: 2));
-    Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, AppRoutes.welcome);
+    }
   }
 }

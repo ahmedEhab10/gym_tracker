@@ -23,7 +23,10 @@ class TodayWorkoutScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => sl<ExerciseBloc>()..add(LoadExercises(dayId)),
       child: Scaffold(
-        appBar: AppBar(title: const Text("Today's Workout")),
+        appBar: AppBar(
+          title: const Text("Today's Workout"),
+          automaticallyImplyActions: false,
+        ),
         body: BlocBuilder<ExerciseBloc, ExerciseState>(
           builder: (context, state) {
             if (state is ExerciseLoading) {
