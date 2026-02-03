@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/features/Splash/spalsh_screen.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/program/program_list_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/training_day_detail_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
@@ -21,6 +22,9 @@ class RouteGenerator {
 
       case AppRoutes.welcome:
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+
+      case AppRoutes.home:
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
 
       case AppRoutes.onboardingSlider:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());

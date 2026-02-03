@@ -8,6 +8,7 @@ class CustomButton extends StatelessWidget {
   final bool isDestructive;
   final Color? backgroundColor;
   final double borderradius;
+  final double? height;
 
   const CustomButton({
     super.key,
@@ -17,13 +18,14 @@ class CustomButton extends StatelessWidget {
     this.isDestructive = false,
     this.backgroundColor,
     this.borderradius = 12,
+    this.height = 56,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: isDestructive

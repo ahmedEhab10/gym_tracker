@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/home/today_workout_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
 
@@ -14,7 +15,7 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> pages = const [
-    TodayWorkoutScreen(),
+    HomeScreen(),
     WeeklyScheduleScreen(),
     Center(child: Text('Exercises')),
     Center(child: Text('Profile')),

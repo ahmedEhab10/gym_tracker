@@ -4,7 +4,7 @@ class AppColors {
   // Backgrounds
   static const Color background = Color(0xff1A1A1A);
   static const Color surface = Color(0xFF1E1E1E);
-  static const Color card = Color(0xFF252525);
+  static const Color card = Color.fromARGB(255, 34, 34, 35);
 
   // Primary & Accents
   static const Color primary = Color(0xFF7BFF00); // Neon Green
