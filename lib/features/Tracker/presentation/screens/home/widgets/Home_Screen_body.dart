@@ -12,7 +12,7 @@ class HomeScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,6 +42,8 @@ class HomeScreenBody extends StatelessWidget {
               ],
             ),
           ),
+
+          // Dynamic Daily Schedule
           Text(
             'Ready to crush your goals today?',
             style: GoogleFonts.spaceGrotesk(
@@ -53,7 +55,7 @@ class HomeScreenBody extends StatelessWidget {
 
           CustomButton(
             height: 60.h,
-            label: 'Start Workouyt',
+            label: 'Start Workout',
             onPressed: () {},
             borderradius: 80.r,
           ),

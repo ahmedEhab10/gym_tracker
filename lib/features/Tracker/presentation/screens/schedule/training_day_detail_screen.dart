@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart';
@@ -197,9 +199,16 @@ class _AddExerciseDialogState extends State<_AddExerciseDialog> {
           children: [
             GestureDetector(
               onTap: () async {
-                setState(() {
-                  selectedImagePath = 'assets/images/image.png';
-                });
+                final picker = ImagePicker();
+                final pickedFile = await picker.pickImage(
+                  source: ImageSource.gallery,
+                );
+
+                if (pickedFile != null) {
+                  setState(() {
+                    selectedImagePath = pickedFile.path;
+                  });
+                }
               },
               child: Container(
                 height: 100,
@@ -209,7 +218,11 @@ class _AddExerciseDialogState extends State<_AddExerciseDialog> {
                   borderRadius: BorderRadius.circular(8),
                   image: selectedImagePath != null
                       ? DecorationImage(
-                          image: AssetImage(selectedImagePath!),
+                          image: selectedImagePath!.startsWith('assets')
+                              ? AssetImage(selectedImagePath!) as ImageProvider
+                              : FileImage(
+                                  File(selectedImagePath!),
+                                ), // Handle local file
                           fit: BoxFit.cover,
                         )
                       : null,

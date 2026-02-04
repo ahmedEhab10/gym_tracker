@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart';
@@ -42,11 +43,17 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     if (state.exercise.imagePath != null) ...[
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          state.exercise.imagePath!,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
+                        child: state.exercise.imagePath!.startsWith('assets')
+                            ? Image.asset(
+                                state.exercise.imagePath!,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(state.exercise.imagePath!),
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                       const SizedBox(height: 16),
                     ],

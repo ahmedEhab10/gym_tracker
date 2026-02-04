@@ -24,11 +24,7 @@ class _MainLayoutState extends State<MainLayout> {
     super.initState();
     pages = [
       const HomeScreen(),
-      BlocProvider(
-        create: (context) =>
-            di.sl<WeeklyScheduleBloc>()..add(const LoadWeeklySchedule()),
-        child: const WeeklyScheduleScreen(),
-      ),
+      const WeeklyScheduleScreen(),
       const Center(child: Text('Exercises')),
       const Center(child: Text('Profile')),
     ];
@@ -41,53 +37,57 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        transitionBuilder: (child, animation) {
-          final slideAnimation = Tween<Offset>(
-            begin: const Offset(0.05, 0),
-            end: Offset.zero,
-          ).animate(animation);
+    return BlocProvider(
+      create: (context) =>
+          di.sl<WeeklyScheduleBloc>()..add(const LoadWeeklySchedule()),
+      child: Scaffold(
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: (child, animation) {
+            final slideAnimation = Tween<Offset>(
+              begin: const Offset(0.05, 0),
+              end: Offset.zero,
+            ).animate(animation);
 
-          return FadeTransition(
-            opacity: animation,
-            child: SlideTransition(position: slideAnimation, child: child),
-          );
-        },
-        child: IndexedStack(
-          key: ValueKey(_selectedIndex),
-          index: _selectedIndex,
-          children: pages,
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(position: slideAnimation, child: child),
+            );
+          },
+          child: IndexedStack(
+            key: ValueKey(_selectedIndex),
+            index: _selectedIndex,
+            children: pages,
+          ),
         ),
-      ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondary,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month_outlined),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center_outlined),
-            label: 'Exercises',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
-        ],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.textSecondary,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_outlined),
+              label: 'Schedule',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.fitness_center_outlined),
+              label: 'Exercises',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }
