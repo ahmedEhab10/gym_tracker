@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Bloc
-import 'package:try_my_tracker/core/di/injection_container.dart'; // SL
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:try_my_tracker/core/di/injection_container.dart';
+import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_event.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_state.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_text_field.dart';
-
-import 'package:uuid/uuid.dart'; // For generating IDs
-import 'package:try_my_tracker/domain/entities/exercise.dart'; // Entity
+import 'package:try_my_tracker/features/Tracker/presentation/widgets/exercise_card.dart';
+import 'package:uuid/uuid.dart';
+import 'package:try_my_tracker/domain/entities/exercise.dart';
 
 class TrainingDayDetailScreen extends StatelessWidget {
   final String dayName;
@@ -27,28 +28,79 @@ class TrainingDayDetailScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => sl<ExerciseBloc>()..add(LoadExercises(dayId)),
       child: Scaffold(
-        appBar: AppBar(title: Text(dayName)),
-        floatingActionButton: Builder(
-          builder: (context) {
-            return FloatingActionButton(
-              onPressed: () => _showAddExerciseDialog(context),
-              child: const Icon(Icons.add),
+        body: BlocBuilder<ExerciseBloc, ExerciseState>(
+          builder: (context, state) {
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 120.0,
+                  floating: false,
+                  pinned: true,
+                  backgroundColor: AppColors.background,
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+                    title: Text(
+                      dayName,
+                      style: GoogleFonts.spaceGrotesk(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => _showAddExerciseDialog(context),
+                    ),
+                  ],
+                ),
+                if (state is ExerciseLoading)
+                  const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (state is ExerciseError)
+                  SliverFillRemaining(child: Center(child: Text(state.message)))
+                else if (state is ExerciseLoaded)
+                  if (state.exercises.isEmpty)
+                    SliverFillRemaining(child: _buildEmptyState(context))
+                  else
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final exercise = state.exercises[index];
+                          return ExerciseCard(
+                            exercise: exercise,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.exerciseDetail,
+                                arguments: exercise,
+                              );
+                            },
+                          );
+                        }, childCount: state.exercises.length),
+                      ),
+                    )
+                else
+                  SliverFillRemaining(child: _buildEmptyState(context)),
+
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 80), // Bottom padding
+                ),
+              ],
             );
           },
         ),
-        body: BlocBuilder<ExerciseBloc, ExerciseState>(
-          builder: (context, state) {
-            if (state is ExerciseLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ExerciseLoaded) {
-              if (state.exercises.isEmpty) {
-                return _buildEmptyState(context);
-              }
-              return _buildExerciseList(state.exercises);
-            } else if (state is ExerciseError) {
-              return Center(child: Text(state.message));
-            }
-            return _buildEmptyState(context);
+        floatingActionButton: Builder(
+          builder: (ctx) {
+            // Use Builder to get context with BlocProvider
+            return FloatingActionButton(
+              onPressed: () => _showAddExerciseDialog(ctx),
+              backgroundColor: AppColors.primary,
+              child: const Icon(Icons.add, color: Colors.black),
+            );
           },
         ),
       ),
@@ -60,16 +112,34 @@ class TrainingDayDetailScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.fitness_center, size: 64, color: AppColors.textHint),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.fitness_center,
+              size: 40,
+              color: AppColors.textHint,
+            ),
+          ),
           const SizedBox(height: 16),
-          const Text(
-            'No exercises added yet',
-            style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+          Text(
+            'No exercises yet',
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textSecondary,
+            ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Add exercises to build your workout',
-            style: TextStyle(fontSize: 14, color: AppColors.textHint),
+          Text(
+            'Start building your workout',
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 14,
+              color: AppColors.textHint,
+            ),
           ),
           const SizedBox(height: 24),
           Padding(
@@ -84,169 +154,144 @@ class TrainingDayDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildExerciseList(List<Exercise> exercises) {
-    return ListView.builder(
-      itemCount: exercises.length,
-      padding: const EdgeInsets.all(16),
-      itemBuilder: (context, index) {
-        final exercise = exercises[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: ListTile(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/exercise-detail',
-                arguments: exercise,
-              );
-            },
-            title: Text(
-              exercise.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(exercise.description),
-            trailing: const Icon(
-              Icons.chevron_right,
-              color: AppColors.textHint,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   void _showAddExerciseDialog(BuildContext context) {
-    final nameController = TextEditingController();
-    final descriptionController = TextEditingController();
-    final youtubeController = TextEditingController();
-    final setsController = TextEditingController(text: '3');
-    String? selectedImagePath;
-
-    // Capture the bloc from the current context before it's lost in the dialog route
+    // Capture the bloc from the current context
     final exerciseBloc = context.read<ExerciseBloc>();
 
     showDialog(
       context: context,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (dialogInnerContext, setState) => AlertDialog(
-          title: const Text(
-            'Add Exercise',
-            style: TextStyle(color: AppColors.textPrimary),
-          ),
-          backgroundColor: AppColors.card,
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    // Simple image picking placeholder logic
-                    // In a real app, use ImagePicker
-                    // For this environment, we simulate setting a path
-                    // Let's assume the user "uploads" and we get a path.
-                    // Actually, I can use image_picker if I want, but I can't interact with the native picker.
-                    // I'll add a button to "Pick Image" and show a placeholder.
-                    setState(() {
-                      selectedImagePath =
-                          'assets/images/image.png'; // Placeholder for simulation
-                    });
-                  },
-                  child: Container(
-                    height: 100,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.textHint.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      image: selectedImagePath != null
-                          ? DecorationImage(
-                              image: AssetImage(selectedImagePath!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                    ),
-                    child: selectedImagePath == null
-                        ? const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_a_photo,
-                                color: AppColors.textSecondary,
-                              ),
-                              Text(
-                                'Add Image (Optional)',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          )
-                        : null,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: nameController,
-                  label: 'Exercise Name',
-                  hint: 'e.g., Bench Press',
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: descriptionController,
-                  label: 'Description',
-                  hint: 'e.g., Focus on form',
-                  maxLines: 2,
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: youtubeController,
-                  label: 'YouTube Link (Optional)',
-                  hint: 'https://youtube.com/...',
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: setsController,
-                  label: 'Number of Sets',
-                  hint: '3',
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (nameController.text.isNotEmpty) {
-                  final newExercise = Exercise(
-                    id: const Uuid().v4(),
-                    trainingDayId: dayId,
-                    name: nameController.text,
-                    description: descriptionController.text,
-                    orderIndex: 0,
-                    imagePath: selectedImagePath,
-                    youtubeLink: youtubeController.text.isEmpty
-                        ? null
-                        : youtubeController.text,
-                    defaultSetsCount: int.tryParse(setsController.text) ?? 3,
-                    lastUsedWeight: null,
-                  );
+      builder: (dialogContext) =>
+          _AddExerciseDialog(dayId: dayId, exerciseBloc: exerciseBloc),
+    );
+  }
+}
 
-                  exerciseBloc.add(AddExerciseEvent(newExercise));
-                  Navigator.pop(dialogContext);
-                }
+class _AddExerciseDialog extends StatefulWidget {
+  final String dayId;
+  final ExerciseBloc exerciseBloc;
+
+  const _AddExerciseDialog({required this.dayId, required this.exerciseBloc});
+
+  @override
+  State<_AddExerciseDialog> createState() => _AddExerciseDialogState();
+}
+
+class _AddExerciseDialogState extends State<_AddExerciseDialog> {
+  final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final youtubeController = TextEditingController();
+  final setsController = TextEditingController(text: '3');
+  String? selectedImagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Add Exercise',
+        style: TextStyle(color: AppColors.textPrimary),
+      ),
+      backgroundColor: AppColors.card,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                setState(() {
+                  selectedImagePath = 'assets/images/image.png';
+                });
               },
-              child: const Text(
-                'Save',
-                style: TextStyle(color: AppColors.primary),
+              child: Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.textHint.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  image: selectedImagePath != null
+                      ? DecorationImage(
+                          image: AssetImage(selectedImagePath!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                child: selectedImagePath == null
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo,
+                            color: AppColors.textSecondary,
+                          ),
+                          Text(
+                            'Add Image (Optional)',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      )
+                    : null,
               ),
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: nameController,
+              label: 'Exercise Name',
+              hint: 'e.g., Bench Press',
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: descriptionController,
+              label: 'Description',
+              hint: 'e.g., Focus on form',
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: youtubeController,
+              label: 'YouTube Link (Optional)',
+              hint: 'https://youtube.com/...',
+            ),
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: setsController,
+              label: 'Number of Sets',
+              hint: '3',
+              keyboardType: TextInputType.number,
             ),
           ],
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (nameController.text.isNotEmpty) {
+              final newExercise = Exercise(
+                id: const Uuid().v4(),
+                trainingDayId: widget.dayId,
+                name: nameController.text,
+                description: descriptionController.text,
+                orderIndex: 0,
+                imagePath: selectedImagePath,
+                youtubeLink: youtubeController.text.isEmpty
+                    ? null
+                    : youtubeController.text,
+                defaultSetsCount: int.tryParse(setsController.text) ?? 3,
+                lastUsedWeight: null,
+              );
+
+              widget.exerciseBloc.add(AddExerciseEvent(newExercise));
+              Navigator.pop(context);
+            }
+          },
+          child: const Text('Save', style: TextStyle(color: AppColors.primary)),
+        ),
+      ],
     );
   }
 }

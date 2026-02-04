@@ -27,7 +27,7 @@ class WeeklyScheduleLocalDataSource {
     }
 
     final schedule = getWeeklySchedule();
-    final updatedDayNames = Map<int, String>.from(schedule.dayNames);
+    final updatedDayNames = List<String>.from(schedule.dayNames);
     updatedDayNames[dayIndex] = name;
 
     final updatedSchedule = WeeklyScheduleModel(dayNames: updatedDayNames);
@@ -47,6 +47,6 @@ class WeeklyScheduleLocalDataSource {
     }
 
     final schedule = getWeeklySchedule();
-    return schedule.dayNames[dayIndex] ?? 'Rest Day';
+    return schedule.dayNames[dayIndex];
   }
 }

@@ -29,7 +29,15 @@ class HiveService {
     Hive.registerAdapter(ExerciseModelAdapter());
     Hive.registerAdapter(ExerciseSetModelAdapter());
     Hive.registerAdapter(WorkoutSessionModelAdapter());
-    Hive.registerAdapter(WeeklyScheduleModelAdapter());
+
+    // Register WeeklyScheduleModel adapter with error handling
+    try {
+      if (!Hive.isAdapterRegistered(5)) {
+        Hive.registerAdapter(WeeklyScheduleModelAdapter());
+      }
+    } catch (e) {
+      print('Error registering WeeklyScheduleModelAdapter: $e');
+    }
 
     // Open Boxes
     await Future.wait([
@@ -38,8 +46,17 @@ class HiveService {
       Hive.openBox<ExerciseModel>(exerciseBoxName),
       Hive.openBox<ExerciseSetModel>(exerciseSetBoxName),
       Hive.openBox<WorkoutSessionModel>(workoutSessionBoxName),
-      Hive.openBox<WeeklyScheduleModel>(weeklyScheduleBoxName),
     ]);
+
+    // Open WeeklySchedule box with error handling for migration
+    try {
+      await Hive.openBox<WeeklyScheduleModel>(weeklyScheduleBoxName);
+    } catch (e) {
+      print('Error opening weekly schedule box, deleting old data: $e');
+      // Delete the corrupted box and create a new one
+      await Hive.deleteBoxFromDisk(weeklyScheduleBoxName);
+      await Hive.openBox<WeeklyScheduleModel>(weeklyScheduleBoxName);
+    }
   }
 
   Box<ProgramModel> get programBox => Hive.box<ProgramModel>(programBoxName);

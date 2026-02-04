@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
+import 'package:try_my_tracker/core/di/injection_container.dart' as di;
 import 'package:try_my_tracker/features/Splash/spalsh_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/program/program_list_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/training_day_detail_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/screens/exercise/exercise_detail_screen.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
 import 'package:try_my_tracker/features/main/main_layout.dart';
 import 'package:try_my_tracker/features/onboarding/presentation/screens/welcome_screen.dart';
 import 'package:try_my_tracker/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -35,7 +39,13 @@ class RouteGenerator {
       case AppRoutes.programList:
         return MaterialPageRoute(builder: (_) => const ProgramListScreen());
       case AppRoutes.weeklySchedule:
-        return MaterialPageRoute(builder: (_) => const WeeklyScheduleScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) =>
+                di.sl<WeeklyScheduleBloc>()..add(const LoadWeeklySchedule()),
+            child: const WeeklyScheduleScreen(),
+          ),
+        );
       case AppRoutes.trainingDayDetail:
         // Expected arguments: {'dayName': String, 'dayId': String}
         final args = settings.arguments as Map<String, dynamic>;

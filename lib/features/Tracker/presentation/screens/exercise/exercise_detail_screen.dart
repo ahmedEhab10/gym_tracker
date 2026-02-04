@@ -9,6 +9,7 @@ import 'package:try_my_tracker/domain/entities/exercise_set.dart';
 import 'package:try_my_tracker/domain/entities/exercise_history.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise_detail/exercise_detail_state.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/widgets/rest_timer_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
@@ -200,6 +201,12 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                 ],
               ),
               ...sessions.map((session) {
+                // Calculate session volume
+                final volume = session.sets.fold<double>(
+                  0,
+                  (sum, set) => sum + (set.reps * set.weight),
+                );
+
                 return TableRow(
                   children: [
                     Padding(
@@ -219,7 +226,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        '${session.sets.length} sets',
+                        '${volume.toStringAsFixed(0)} kg',
                         style: const TextStyle(color: AppColors.textPrimary),
                       ),
                     ),
@@ -240,24 +247,46 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     BuildContext context,
     ExerciseDetailLoaded state,
   ) {
+    double totalVolume = 0;
+    for (var set in state.currentSets) {
+      if (set.isCompleted) {
+        totalVolume += (set.reps * set.weight);
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Today',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Today',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                Text(
+                  'Total Volume: ${totalVolume.toStringAsFixed(0)} kg',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
             ),
             IconButton(
               icon: const Icon(Icons.timer, color: AppColors.primary),
               onPressed: () {
-                // Open Timer
+                showDialog(
+                  context: context,
+                  builder: (context) => const RestTimerDialog(),
+                );
               },
             ),
           ],
@@ -343,89 +372,109 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       }
     }
 
+    final setVolume = set.reps * set.weight;
+
     return Card(
       color: AppColors.card,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
+        child: Column(
           children: [
-            SizedBox(
-              width: 24,
-              child: Text(
-                '${set.setNumber}',
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Weight Input
-            Expanded(
-              flex: 3,
-              child: TextFormField(
-                initialValue: set.weight.toString(),
-                keyboardType: TextInputType.number,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                ),
-                decoration: InputDecoration(
-                  suffixText: 'kg',
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+            Row(
+              children: [
+                SizedBox(
+                  width: 24,
+                  child: Text(
+                    '${set.setNumber}',
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                onChanged: (val) {
-                  final weight = double.tryParse(val) ?? 0;
-                  context.read<ExerciseDetailBloc>().add(
-                    UpdateSet(set.copyWith(weight: weight)),
-                  );
-                },
-              ),
-            ),
-            if (indicatorIcon != null) ...[
-              const SizedBox(width: 4),
-              Icon(indicatorIcon, size: 16, color: indicatorColor),
-            ],
-            const SizedBox(width: 12),
-            // Reps Input
-            Expanded(
-              flex: 2,
-              child: TextFormField(
-                initialValue: set.reps.toString(),
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: InputDecoration(
-                  prefixText: 'x ',
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                const SizedBox(width: 12),
+                // Weight Input
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    initialValue: set.weight.toString(),
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: InputDecoration(
+                      suffixText: 'kg',
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onChanged: (val) {
+                      final weight = double.tryParse(val) ?? 0;
+                      context.read<ExerciseDetailBloc>().add(
+                        UpdateSet(set.copyWith(weight: weight)),
+                      );
+                    },
                   ),
                 ),
-                onChanged: (val) {
-                  final reps = int.tryParse(val) ?? 0;
-                  context.read<ExerciseDetailBloc>().add(
-                    UpdateSet(set.copyWith(reps: reps)),
-                  );
-                },
-              ),
+                if (indicatorIcon != null) ...[
+                  const SizedBox(width: 4),
+                  Icon(indicatorIcon, size: 16, color: indicatorColor),
+                ],
+                const SizedBox(width: 12),
+                // Reps Input
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    initialValue: set.reps.toString(),
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(color: AppColors.textPrimary),
+                    decoration: InputDecoration(
+                      prefixText: 'x ',
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onChanged: (val) {
+                      final reps = int.tryParse(val) ?? 0;
+                      context.read<ExerciseDetailBloc>().add(
+                        UpdateSet(set.copyWith(reps: reps)),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(
+                    set.isCompleted
+                        ? Icons.check_circle
+                        : Icons.check_circle_outline,
+                    color: set.isCompleted ? Colors.green : AppColors.textHint,
+                  ),
+                  onPressed: () {
+                    context.read<ExerciseDetailBloc>().add(
+                      UpdateSet(set.copyWith(isCompleted: !set.isCompleted)),
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: Icon(
-                set.isCompleted
-                    ? Icons.check_circle
-                    : Icons.check_circle_outline,
-                color: set.isCompleted ? Colors.green : AppColors.textHint,
+            if (setVolume > 0)
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4, right: 48),
+                  child: Text(
+                    '${setVolume.toStringAsFixed(1)} kg',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textHint.withOpacity(0.5),
+                    ),
+                  ),
+                ),
               ),
-              onPressed: () {
-                context.read<ExerciseDetailBloc>().add(
-                  UpdateSet(set.copyWith(isCompleted: !set.isCompleted)),
-                );
-              },
-            ),
           ],
         ),
       ),
