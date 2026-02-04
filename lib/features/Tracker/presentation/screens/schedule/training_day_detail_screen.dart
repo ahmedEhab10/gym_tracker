@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart';
@@ -9,11 +7,15 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_event.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_state.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/blocs/workout_timer/workout_timer_cubit.dart';
+import 'package:try_my_tracker/features/Tracker/presentation/blocs/workout_timer/workout_timer_state.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_text_field.dart';
 import 'package:try_my_tracker/features/Tracker/presentation/widgets/exercise_card.dart';
 import 'package:uuid/uuid.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class TrainingDayDetailScreen extends StatelessWidget {
   final String dayName;
@@ -27,8 +29,13 @@ class TrainingDayDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<ExerciseBloc>()..add(LoadExercises(dayId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => sl<ExerciseBloc>()..add(LoadExercises(dayId)),
+        ),
+        BlocProvider(create: (_) => WorkoutTimerCubit()),
+      ],
       child: Scaffold(
         body: BlocBuilder<ExerciseBloc, ExerciseState>(
           builder: (context, state) {
@@ -95,9 +102,9 @@ class TrainingDayDetailScreen extends StatelessWidget {
             );
           },
         ),
+        bottomNavigationBar: _buildBottomBar(),
         floatingActionButton: Builder(
           builder: (ctx) {
-            // Use Builder to get context with BlocProvider
             return FloatingActionButton(
               onPressed: () => _showAddExerciseDialog(ctx),
               backgroundColor: AppColors.primary,
@@ -108,6 +115,118 @@ class TrainingDayDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildBottomBar() {
+    return BlocBuilder<WorkoutTimerCubit, WorkoutTimerState>(
+      builder: (context, state) {
+        if (state is WorkoutTimerInitial) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CustomButton(
+                label: 'Start Workout',
+                onPressed: () {
+                  context.read<WorkoutTimerCubit>().startWorkout();
+                },
+              ),
+            ),
+          );
+        } else if (state is WorkoutInProgress) {
+          final duration = state.durationSeconds;
+          final minutes = (duration ~/ 60).toString().padLeft(2, '0');
+          final seconds = (duration % 60).toString().padLeft(2, '0');
+
+          return Container(
+            color: AppColors.card,
+            padding: const EdgeInsets.all(16.0),
+            child: SafeArea(
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.timer,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$minutes:$seconds',
+                          style: GoogleFonts.spaceMono(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: CustomButton(
+                      label: 'Finish',
+                      onPressed: () {
+                        context.read<WorkoutTimerCubit>().finishWorkout();
+                        _showFinishDialog(context, duration);
+                      },
+                      height: 50,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  void _showFinishDialog(BuildContext context, int duration) {
+    final minutes = duration ~/ 60;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.card,
+        title: const Text(
+          'Workout Finished!',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'Great job! You worked out for $minutes minutes.',
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext); // Close dialog
+              context
+                  .read<WorkoutTimerCubit>()
+                  .reset(); // Reset timer to Initial
+            },
+            child: const Text(
+              'Close',
+              style: TextStyle(color: AppColors.primary),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ... (rest of the file: _buildEmptyState, _showAddExerciseDialog)
 
   Widget _buildEmptyState(BuildContext context) {
     return Center(
