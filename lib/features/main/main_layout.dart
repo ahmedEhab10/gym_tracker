@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart' as di;
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/Home_Screen.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/Switcer_page.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -24,12 +25,13 @@ class _MainLayoutState extends State<MainLayout> {
     super.initState();
     pages = [
       const HomeScreen(),
-      const WeeklyScheduleScreen(),
+      const SwitcerPage(),
       const Center(child: Text('Exercises')),
       const Center(child: Text('Profile')),
     ];
   }
 
+  //WeeklyScheduleScreen()
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
     setState(() => _selectedIndex = index);

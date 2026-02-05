@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/widgets/exrcies_continar.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/exrcies_continar.dart';
 
 class RecentProgressCard extends StatelessWidget {
   const RecentProgressCard({super.key});
@@ -18,11 +18,11 @@ class RecentProgressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: const Color.fromARGB(101, 255, 255, 255),
-          width: 0.9.w,
+          width: 1.w,
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,9 +81,9 @@ class RecentProgressCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ExrciesContinar(title: 'Deadlift'),
-
+                SizedBox(width: 26.w),
                 ExrciesContinar(title: 'Squat'),
-
+                SizedBox(width: 26.w),
                 ExrciesContinar(title: 'Bench Press'),
               ],
             ),

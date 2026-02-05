@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/widgets/Home_Screen_apper.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/widgets/recent_progress_card.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/widgets/work_out_info_card.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/Home_Screen_apper.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/recent_progress_card.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/work_out_info_card.dart';
 
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({super.key});

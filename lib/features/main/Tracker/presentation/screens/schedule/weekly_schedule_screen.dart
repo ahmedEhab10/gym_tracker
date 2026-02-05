@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_state.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/widgets/day_schedule_card.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/widgets/edit_day_name_dialog.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_state.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/day_schedule_card.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/edit_day_name_dialog.dart';
 
 class WeeklyScheduleScreen extends StatelessWidget {
   const WeeklyScheduleScreen({super.key});

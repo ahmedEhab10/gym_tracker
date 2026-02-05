@@ -10,9 +10,9 @@ import 'package:try_my_tracker/domain/usecases/exercise/exercise_usecases.dart';
 import 'package:try_my_tracker/domain/usecases/exercise/get_exercise_history.dart';
 import 'package:try_my_tracker/domain/usecases/schedule/get_weekly_schedule.dart';
 import 'package:try_my_tracker/domain/usecases/schedule/update_day_name.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
 
 final sl = GetIt.instance;
 

@@ -4,9 +4,9 @@ import 'package:try_my_tracker/core/di/injection_container.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 
 import 'package:try_my_tracker/domain/entities/exercise.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_event.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise/exercise_state.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_event.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_state.dart';
 
 class TodayWorkoutScreen extends StatelessWidget {
   const TodayWorkoutScreen({super.key});

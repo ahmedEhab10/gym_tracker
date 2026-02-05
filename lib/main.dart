@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/routes/router.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart' as di;
-import 'package:try_my_tracker/features/Tracker/presentation/screens/home/today_workout_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/today_workout_screen.dart';
 
 import 'core/theme/app_theme.dart';
 

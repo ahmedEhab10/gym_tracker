@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise_detail/exercise_detail_event.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_event.dart';
 import 'package:try_my_tracker/domain/entities/exercise_set.dart';
 import 'package:try_my_tracker/domain/entities/exercise_history.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/blocs/exercise_detail/exercise_detail_state.dart';
-import 'package:try_my_tracker/features/Tracker/presentation/widgets/rest_timer_dialog.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_state.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/rest_timer_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
