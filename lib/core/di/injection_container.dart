@@ -13,6 +13,12 @@ import 'package:try_my_tracker/domain/usecases/schedule/update_day_name.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_bloc.dart';
+import 'package:try_my_tracker/domain/usecases/program/program_usecases.dart';
+import 'package:try_my_tracker/domain/repositories/program_repository.dart';
+import 'package:try_my_tracker/data/repositories/program_repository_impl.dart';
+import 'package:try_my_tracker/data/datasources/local/program_local_datasource.dart';
+import 'package:uuid/uuid.dart';
 
 final sl = GetIt.instance;
 
@@ -62,8 +68,43 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton(() => WeeklyScheduleLocalDataSource(sl()));
 
+  // ! Features - Program
+  // Bloc
+  sl.registerFactory(
+    () => ProgramBloc(
+      getPrograms: sl(),
+      createProgram: sl(),
+      updateProgram: sl(),
+      deleteProgram: sl(),
+      getTrainingDaysForProgram: sl(),
+      addTrainingDay: sl(),
+      deleteTrainingDay: sl(),
+      uuid: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetPrograms(sl()));
+  sl.registerLazySingleton(() => CreateProgram(sl()));
+  sl.registerLazySingleton(() => UpdateProgram(sl()));
+  sl.registerLazySingleton(() => DeleteProgram(sl()));
+  sl.registerLazySingleton(() => GetTrainingDaysForProgram(sl()));
+  sl.registerLazySingleton(() => AddTrainingDay(sl()));
+  sl.registerLazySingleton(() => UpdateTrainingDay(sl()));
+  sl.registerLazySingleton(() => DeleteTrainingDay(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ProgramRepository>(
+    () => ProgramRepositoryImpl(localDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ProgramLocalDataSource>(
+    () => ProgramLocalDataSourceImpl(hiveService: sl(), uuid: sl()),
+  );
+
   // ! Core
-  // NetworkInfo, etc.
+  sl.registerLazySingleton(() => const Uuid());
 
   // ! External
   // Hive Boxes registration will go here

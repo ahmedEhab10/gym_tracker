@@ -9,4 +9,5 @@ class AppRoutes {
   static const String weeklySchedule = '/weekly-schedule';
   static const String trainingDayDetail = '/training-day-detail';
   static const String exerciseDetail = '/exercise-detail';
+  static const String programDetail = '/program-detail';
 }

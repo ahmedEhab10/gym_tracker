@@ -5,6 +5,9 @@ import 'package:try_my_tracker/core/di/injection_container.dart' as di;
 import 'package:try_my_tracker/features/Splash/spalsh_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/program/program_list_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/program/program_detail_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_event.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/schedule/training_day_detail_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exercise/exercise_detail_screen.dart';
@@ -37,7 +40,22 @@ class RouteGenerator {
         // The user last changed home to ProgramListScreen in main.dart
         return MaterialPageRoute(builder: (_) => const ProgramListScreen());
       case AppRoutes.programList:
-        return MaterialPageRoute(builder: (_) => const ProgramListScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => di.sl<ProgramBloc>()..add(LoadAllPrograms()),
+            child: const ProgramListScreen(),
+          ),
+        );
+      case AppRoutes.programDetail:
+        final args = settings.arguments as Map<String, dynamic>;
+        // We pass a fresh bloc or we could pass the existing one if we used nested navigation.
+        // For simplicity, strict clean architecture, we create a new bloc and load details.
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => di.sl<ProgramBloc>(), // Load initiated in initState
+            child: ProgramDetailScreen(programId: args['programId']),
+          ),
+        );
       case AppRoutes.weeklySchedule:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
