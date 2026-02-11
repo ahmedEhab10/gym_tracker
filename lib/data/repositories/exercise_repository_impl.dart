@@ -41,6 +41,18 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
   }
 
   @override
+  Future<Either<Failure, List<Exercise>>> getExercisesByIds(
+    List<String> ids,
+  ) async {
+    try {
+      final models = await localDataSource.getExercisesByIds(ids);
+      return Right(models.map((m) => m.toEntity()).toList());
+    } on CacheException {
+      return const Left(CacheFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> addExercise(Exercise exercise) async {
     try {
       final model = ExerciseModel.fromEntity(exercise);

@@ -1,5 +1,6 @@
 import '../../../../core/errors/exceptions.dart';
 import '../../models/workout_session_model.dart';
+import '../../models/exercise_set_model.dart';
 import 'hive_service.dart';
 
 abstract class WorkoutLocalDataSource {
@@ -10,6 +11,7 @@ abstract class WorkoutLocalDataSource {
     DateTime? startDate,
     DateTime? endDate,
   });
+  Future<List<ExerciseSetModel>> getSetsForSession(String sessionId);
 }
 
 class WorkoutLocalDataSourceImpl implements WorkoutLocalDataSource {
@@ -68,6 +70,17 @@ class WorkoutLocalDataSourceImpl implements WorkoutLocalDataSource {
       query.sort((a, b) => b.startTime.compareTo(a.startTime));
 
       return query;
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<List<ExerciseSetModel>> getSetsForSession(String sessionId) async {
+    try {
+      return hiveService.exerciseSetBox.values
+          .where((s) => s.workoutSessionId == sessionId)
+          .toList();
     } catch (e) {
       throw CacheException();
     }

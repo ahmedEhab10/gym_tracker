@@ -17,6 +17,7 @@ abstract class ExerciseRepository {
   Future<Either<Failure, List<Exercise>>> getExercisesForDay(
     String trainingDayId,
   );
+  Future<Either<Failure, List<Exercise>>> getExercisesByIds(List<String> ids);
   Future<Either<Failure, void>> addExercise(Exercise exercise);
   Future<Either<Failure, void>> updateExercise(Exercise exercise);
   Future<Either<Failure, void>> deleteExercise(String id);

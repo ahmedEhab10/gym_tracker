@@ -22,4 +22,7 @@ abstract class WorkoutRepository {
   Future<Either<Failure, List<ExerciseSet>>> getExerciseHistory(
     String exerciseId,
   );
+  Future<Either<Failure, List<ExerciseSet>>> getSetsForSession(
+    String sessionId,
+  );
 }

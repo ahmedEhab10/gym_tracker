@@ -6,6 +6,7 @@ import 'hive_service.dart';
 
 abstract class ExerciseLocalDataSource {
   Future<List<ExerciseModel>> getExercisesForDay(String trainingDayId);
+  Future<List<ExerciseModel>> getExercisesByIds(List<String> ids);
   Future<void> addExercise(ExerciseModel exercise);
   Future<void> updateExercise(ExerciseModel exercise);
   Future<void> deleteExercise(String id);
@@ -31,6 +32,18 @@ class ExerciseLocalDataSourceImpl implements ExerciseLocalDataSource {
           .where((e) => e.trainingDayId == trainingDayId)
           .toList()
         ..sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<List<ExerciseModel>> getExercisesByIds(List<String> ids) async {
+    try {
+      final idSet = ids.toSet();
+      return hiveService.exerciseBox.values
+          .where((e) => idSet.contains(e.id))
+          .toList();
     } catch (e) {
       throw CacheException();
     }

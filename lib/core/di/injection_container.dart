@@ -18,6 +18,11 @@ import 'package:try_my_tracker/domain/usecases/program/program_usecases.dart';
 import 'package:try_my_tracker/domain/repositories/program_repository.dart';
 import 'package:try_my_tracker/data/repositories/program_repository_impl.dart';
 import 'package:try_my_tracker/data/datasources/local/program_local_datasource.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/home/home_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/domain/usecases/get_home_dashboard_data.dart';
+import 'package:try_my_tracker/domain/repositories/workout_repository.dart';
+import 'package:try_my_tracker/data/repositories/workout_repository_impl.dart';
+import 'package:try_my_tracker/data/datasources/local/workout_local_datasource.dart';
 import 'package:uuid/uuid.dart';
 
 final sl = GetIt.instance;
@@ -98,6 +103,29 @@ Future<void> init() async {
     () => ProgramRepositoryImpl(localDataSource: sl()),
   );
 
+  // ! Features - Home
+  // Bloc
+  sl.registerFactory(() => HomeBloc(getHomeDashboardData: sl()));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetHomeDashboardData(sl(), sl()));
+
+  // ! Features - Workout
+  // Repository
+  sl.registerLazySingleton<WorkoutRepository>(
+    () => WorkoutRepositoryImpl(
+      workoutLocalDataSource: sl(),
+      exerciseLocalDataSource: sl(),
+      uuid: sl(),
+    ),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<WorkoutLocalDataSource>(
+    () => WorkoutLocalDataSourceImpl(hiveService: sl()),
+  );
+
+  // ! Features - Program
   // Data sources
   sl.registerLazySingleton<ProgramLocalDataSource>(
     () => ProgramLocalDataSourceImpl(hiveService: sl(), uuid: sl()),

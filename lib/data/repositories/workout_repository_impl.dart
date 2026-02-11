@@ -22,6 +22,18 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   });
 
   @override
+  Future<Either<Failure, List<ExerciseSet>>> getSetsForSession(
+    String sessionId,
+  ) async {
+    try {
+      final models = await workoutLocalDataSource.getSetsForSession(sessionId);
+      return Right(models.map((m) => m.toEntity()).toList());
+    } on CacheException {
+      return const Left(CacheFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, WorkoutSession>> startSession(
     String trainingDayId,
   ) async {
