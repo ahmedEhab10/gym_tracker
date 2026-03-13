@@ -58,7 +58,7 @@ class ProgramBloc extends Bloc<ProgramEvent, ProgramState> {
       id: uuid.v4(),
       name: event.name,
       description: event.description,
-      trainingDayIds: [],
+      trainingDayIds: const [],
       isActive: false, // Default not active
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -151,7 +151,7 @@ class ProgramBloc extends Bloc<ProgramEvent, ProgramState> {
       programId: event.programId,
       name: event.name,
       dayOfWeek: 0, // Not used for custom routes
-      exerciseIds: [],
+      exerciseIds: const [],
       orderIndex: DateTime.now().millisecondsSinceEpoch, // Simple ordering
     );
 

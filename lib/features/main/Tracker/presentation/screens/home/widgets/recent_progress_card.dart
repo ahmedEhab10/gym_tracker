@@ -108,7 +108,7 @@ class RecentProgressCard extends StatelessWidget {
 
             Row(
               children: [
-                Icon(Icons.timer, color: AppColors.textHint),
+                const Icon(Icons.timer, color: AppColors.textHint),
                 SizedBox(width: 8.w),
                 Text(
                   '${data.durationMinutes} min total duration',

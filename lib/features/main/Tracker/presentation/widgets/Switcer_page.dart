@@ -120,7 +120,11 @@ class SwitcerPage extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, color: AppColors.textHint, size: 16),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.textHint,
+              size: 16,
+            ),
           ],
         ),
       ),

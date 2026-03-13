@@ -42,7 +42,7 @@ class _OnboardinScreensState extends State<OnboardinScreens> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     currentScreen.title,
                     style: GoogleFonts.spaceGrotesk(

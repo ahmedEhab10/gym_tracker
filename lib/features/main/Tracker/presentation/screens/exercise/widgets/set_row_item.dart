@@ -77,7 +77,7 @@ class SetRowItem extends StatelessWidget {
                   width: 28,
                   height: 28,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.background,
                     shape: BoxShape.circle,
                   ),

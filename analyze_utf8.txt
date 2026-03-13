@@ -1,0 +1,8 @@
+Analyzing profile...                                            
+
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\main\tracker\presentation\screens\profile\widgets\personal_records_section.dart:47:53 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\main\tracker\presentation\screens\profile\widgets\profile_header.dart:29:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\main\tracker\presentation\screens\profile\widgets\profile_menu_list.dart:49:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\main\tracker\presentation\screens\profile\widgets\profile_menu_list.dart:56:42 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\main\tracker\presentation\screens\profile\widgets\profile_menu_list.dart:72:13 - prefer_const_constructors
+

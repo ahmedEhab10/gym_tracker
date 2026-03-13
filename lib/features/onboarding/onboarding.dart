@@ -14,7 +14,7 @@ class Onboarding extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Spacer(),
+            const Spacer(),
             Image.asset('assets/images/app_logo.png'),
             SizedBox(height: 32.h),
             Text(
@@ -64,7 +64,7 @@ class Onboarding extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: CustomButton(
@@ -76,7 +76,7 @@ class Onboarding extends StatelessWidget {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

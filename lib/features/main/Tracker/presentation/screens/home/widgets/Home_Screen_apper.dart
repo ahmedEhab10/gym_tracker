@@ -84,9 +84,9 @@ class HomeScreenApper extends StatelessWidget {
                 border: Border.all(color: AppColors.textPrimary),
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: const Icon(Icons.notifications),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Icon(Icons.notifications),
               ),
             ),
           ],

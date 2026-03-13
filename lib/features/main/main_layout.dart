@@ -4,9 +4,8 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart' as di;
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
-import 'package:try_my_tracker/features/main/Tracker/presentation/screens/Exercises_Screen/exercises_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
-import 'package:try_my_tracker/features/main/Tracker/presentation/screens/schedule/weekly_schedule_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/profile_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/Switcer_page.dart';
 
 class MainLayout extends StatefulWidget {
@@ -24,12 +23,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
-    pages = [
-      const HomeScreen(),
-      const SwitcerPage(),
-      const ExercisesScreen(),
-      const Center(child: Text('Profile')),
-    ];
+    pages = [const HomeScreen(), const SwitcerPage(), const ProfileScreen()];
   }
 
   //WeeklyScheduleScreen()
@@ -81,10 +75,7 @@ class _MainLayoutState extends State<MainLayout> {
               icon: Icon(Icons.calendar_month_outlined),
               label: 'Schedule',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.fitness_center_outlined),
-              label: 'Exercises',
-            ),
+
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               label: 'Profile',

@@ -132,7 +132,9 @@ class CurrentSessionSection extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  context.read<ExerciseDetailBloc>().add(FinishExercise());
+                  context.read<ExerciseDetailBloc>().add(
+                    const FinishExercise(),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Exercise Finished and Saved!'),

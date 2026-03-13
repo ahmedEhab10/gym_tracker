@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:try_my_tracker/domain/entities/program.dart';
-import 'package:try_my_tracker/domain/entities/training_day.dart';
 
 abstract class ProgramEvent extends Equatable {
   const ProgramEvent();
