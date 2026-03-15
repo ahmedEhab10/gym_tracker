@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
-
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/measures/measures_list_screen.dart';
 class ProfileMenuList extends StatelessWidget {
   const ProfileMenuList({super.key});
 
@@ -26,7 +26,12 @@ class ProfileMenuList extends StatelessWidget {
           icon: Icons.straighten,
           title: 'Measures',
           onTap: () {
-            // TODO: Navigate to Measures page
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MeasuresListScreen(),
+              ),
+            );
           },
         ),
       ],

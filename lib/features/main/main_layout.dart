@@ -4,6 +4,7 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart' as di;
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_event.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/profile_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/Switcer_page.dart';
@@ -34,9 +35,15 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          di.sl<WeeklyScheduleBloc>()..add(const LoadWeeklySchedule()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => di.sl<WeeklyScheduleBloc>()..add(const LoadWeeklySchedule()),
+        ),
+        BlocProvider(
+          create: (context) => di.sl<ProfileCubit>()..loadProfile(),
+        ),
+      ],
       child: Scaffold(
         body: AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),

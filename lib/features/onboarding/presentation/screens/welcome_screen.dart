@@ -15,8 +15,12 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
-            Image.asset('assets/images/app_logo.png'),
-            SizedBox(height: 32.h),
+            Image.asset(
+              'assets/images/Hobix_app_logo.png',
+              height: 250.h,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 8.h),
             Text(
               'PERFORMANCE',
               style: GoogleFonts.spaceGrotesk(

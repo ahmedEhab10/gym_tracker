@@ -23,6 +23,16 @@ import 'package:try_my_tracker/features/main/Tracker/domain/usecases/get_home_da
 import 'package:try_my_tracker/domain/repositories/workout_repository.dart';
 import 'package:try_my_tracker/data/repositories/workout_repository_impl.dart';
 import 'package:try_my_tracker/data/datasources/local/workout_local_datasource.dart';
+import 'package:try_my_tracker/domain/usecases/measurement_usecases.dart';
+import 'package:try_my_tracker/domain/repositories/measurement_repository.dart';
+import 'package:try_my_tracker/data/repositories/measurement_repository_impl.dart';
+import 'package:try_my_tracker/data/datasources/local/measurement_local_datasource.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/measurement/measurement_cubit.dart';
+import 'package:try_my_tracker/domain/usecases/profile_usecases.dart';
+import 'package:try_my_tracker/domain/repositories/profile_repository.dart';
+import 'package:try_my_tracker/data/repositories/profile_repository_impl.dart';
+import 'package:try_my_tracker/data/datasources/local/profile_local_datasource.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
 import 'package:uuid/uuid.dart';
 
 final sl = GetIt.instance;
@@ -129,6 +139,54 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<ProgramLocalDataSource>(
     () => ProgramLocalDataSourceImpl(hiveService: sl(), uuid: sl()),
+  );
+
+  // ! Features - Measures
+  // Bloc / Cubit
+  sl.registerFactory(
+    () => MeasurementCubit(
+      getMeasurementsUseCase: sl(),
+      saveMeasurementUseCase: sl(),
+      deleteMeasurementUseCase: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetMeasurements(sl()));
+  sl.registerLazySingleton(() => SaveMeasurement(sl()));
+  sl.registerLazySingleton(() => DeleteMeasurement(sl()));
+
+  // Repository
+  sl.registerLazySingleton<MeasurementRepository>(
+    () => MeasurementRepositoryImpl(localDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<MeasurementLocalDataSource>(
+    () => MeasurementLocalDataSourceImpl(hiveService: sl()),
+  );
+
+  // ! Features - Profile
+  // Bloc / Cubit
+  sl.registerFactory(
+    () => ProfileCubit(
+      getProfileUseCase: sl(),
+      saveProfileUseCase: sl(),
+    ),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetProfile(sl()));
+  sl.registerLazySingleton(() => SaveProfile(sl()));
+
+  // Repository
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(localDataSource: sl()),
+  );
+
+  // Data sources
+  sl.registerLazySingleton<ProfileLocalDataSource>(
+    () => ProfileLocalDataSourceImpl(hiveService: sl()),
   );
 
   // ! Core

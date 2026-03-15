@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
-import 'package:try_my_tracker/core/theme/app_colors.dart';
 
 class SplashScreenBody extends StatefulWidget {
   const SplashScreenBody({super.key});
@@ -23,17 +22,14 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Text(
-            "My Tracker",
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
+          child: Image.asset(
+            'assets/images/splash_screen_logo.png',
+            width: 250, // Adjust size as necessary
+            fit: BoxFit.contain,
           ),
         ),
       ],

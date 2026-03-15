@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/home/home_bloc.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_state.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/Home_Screen_apper.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/recent_progress_card.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/widgets/work_out_info_card.dart';
@@ -39,31 +41,42 @@ class HomeScreenBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20.h),
                   const HomeScreenApper(),
                   SizedBox(height: 20.h),
-                  Text.rich(
-                    TextSpan(
-                      children: [
+                  BlocBuilder<ProfileCubit, ProfileState>(
+                    builder: (context, profileState) {
+                      String firstName = 'Ahmed'; // Fallback
+                      if (profileState is ProfileLoaded) {
+                        // Extract first name (split by space and take first element)
+                        firstName = profileState.profile.name.split(' ').first;
+                      }
+                      
+                      return Text.rich(
                         TextSpan(
-                          text: 'Welcome back, ',
-                          style: GoogleFonts.spaceGrotesk(
-                            letterSpacing: -1,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Welcome back, ',
+                              style: GoogleFonts.spaceGrotesk(
+                                letterSpacing: -1,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$firstName ',
+                              style: GoogleFonts.spaceGrotesk(
+                                letterSpacing: -1,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                          text: 'Ahmed ', // TODO: Make dynamic later
-                          style: GoogleFonts.spaceGrotesk(
-                            letterSpacing: -1,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
 
                   // Dynamic Daily Schedule
