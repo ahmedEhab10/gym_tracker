@@ -20,19 +20,28 @@ class ProfileModelAdapter extends TypeAdapter<ProfileModel> {
       id: fields[0] as String,
       name: fields[1] as String,
       profilePicturePath: fields[2] as String?,
+      age: fields[3] as int?,
+      gender: fields[4] as String?,
+      goals: (fields[5] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ProfileModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.profilePicturePath);
+      ..write(obj.profilePicturePath)
+      ..writeByte(3)
+      ..write(obj.age)
+      ..writeByte(4)
+      ..write(obj.gender)
+      ..writeByte(5)
+      ..write(obj.goals);
   }
 
   @override

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenBody extends StatefulWidget {
   const SplashScreenBody({super.key});
@@ -28,7 +31,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
         Center(
           child: Image.asset(
             'assets/images/splash_screen_logo.png',
-            width: 250, // Adjust size as necessary
+            width: 350.w, // Adjust size as necessary
             fit: BoxFit.contain,
           ),
         ),
@@ -37,9 +40,17 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
   }
 
   Future<void> navigateToHome() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasCompletedSetup = prefs.getBool('has_completed_setup') ?? false;
+
     await Future.delayed(const Duration(seconds: 2));
+    
     if (mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.welcome);
+      if (hasCompletedSetup) {
+        Navigator.pushReplacementNamed(context, AppRoutes.mainLayout);
+      } else {
+        Navigator.pushReplacementNamed(context, AppRoutes.welcome);
+      }
     }
   }
 }

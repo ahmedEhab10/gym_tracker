@@ -16,7 +16,9 @@ class WeeklyScheduleModelAdapter extends TypeAdapter<WeeklyScheduleModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return WeeklyScheduleModel(dayNames: (fields[0] as List).cast<String>());
+    return WeeklyScheduleModel(
+      dayNames: (fields[0] as List).cast<String>(),
+    );
   }
 
   @override

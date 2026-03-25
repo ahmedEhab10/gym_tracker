@@ -16,7 +16,10 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_s
 import 'package:try_my_tracker/features/main/main_layout.dart';
 import 'package:try_my_tracker/features/onboarding/presentation/screens/welcome_screen.dart';
 import 'package:try_my_tracker/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:try_my_tracker/features/onboarding/presentation/screens/setup_screen.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/measurement/measurement_cubit.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -35,10 +38,18 @@ class RouteGenerator {
 
       case AppRoutes.onboardingSlider:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
-      case AppRoutes.home:
-        // For now, home can be TodayWorkout or ProgramList, defaulting to ProgramList based on previous user flow/edits
-        // The user last changed home to ProgramListScreen in main.dart
-        return MaterialPageRoute(builder: (_) => const ProgramListScreen());
+
+      case AppRoutes.setup:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => di.sl<ProfileCubit>()..loadProfile()),
+              BlocProvider(create: (_) => di.sl<MeasurementCubit>()..loadMeasurements()),
+            ],
+            child: const SetupScreen(),
+          ),
+        );
+
       case AppRoutes.programList:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

@@ -14,6 +14,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
       id: profile.id,
       name: profile.name,
       profilePicturePath: profile.profilePicturePath,
+      age: profile.age,
+      gender: profile.gender,
+      goals: profile.goals,
     );
     await localDataSource.saveProfile(model);
   }
@@ -32,6 +35,9 @@ class MeasurementEntityMapper {
       id: model.id,
       name: model.name,
       profilePicturePath: model.profilePicturePath,
+      age: model.age,
+      gender: model.gender,
+      goals: model.goals,
     );
   }
 }
