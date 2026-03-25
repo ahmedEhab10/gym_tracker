@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/measures/measures_list_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/workout_history_screen.dart';
 class ProfileMenuList extends StatelessWidget {
   const ProfileMenuList({super.key});
 
@@ -13,7 +14,14 @@ class ProfileMenuList extends StatelessWidget {
         _buildMenuItem(
           icon: Icons.history,
           title: 'Workout History',
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const WorkoutHistoryScreen(),
+              ),
+            );
+          },
         ),
         SizedBox(height: 12.h),
         _buildMenuItem(

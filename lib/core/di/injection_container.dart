@@ -33,6 +33,7 @@ import 'package:try_my_tracker/domain/repositories/profile_repository.dart';
 import 'package:try_my_tracker/data/repositories/profile_repository_impl.dart';
 import 'package:try_my_tracker/data/datasources/local/profile_local_datasource.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/workout_history/workout_history_cubit.dart';
 import 'package:uuid/uuid.dart';
 
 final sl = GetIt.instance;
@@ -187,6 +188,11 @@ Future<void> init() async {
   // Data sources
   sl.registerLazySingleton<ProfileLocalDataSource>(
     () => ProfileLocalDataSourceImpl(hiveService: sl()),
+  );
+
+  // ! Features - Workout History
+  sl.registerFactory(
+    () => WorkoutHistoryCubit(workoutRepository: sl(), hiveService: sl()),
   );
 
   // ! Core
