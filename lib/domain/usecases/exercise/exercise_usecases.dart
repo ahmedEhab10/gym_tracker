@@ -36,3 +36,15 @@ class UpdateExercise implements UseCase<void, Exercise> {
     return await repository.updateExercise(exercise);
   }
 }
+
+class DeleteExercise implements UseCase<void, String> {
+  final ExerciseRepository repository;
+
+  DeleteExercise(this.repository);
+
+  @override
+  Future<Either<Failure, void>> call(String id) async {
+    return await repository.deleteExercise(id);
+  }
+}
+

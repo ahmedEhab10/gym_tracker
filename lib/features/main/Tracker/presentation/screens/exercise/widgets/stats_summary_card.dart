@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
 import 'package:try_my_tracker/domain/entities/exercise_history.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StatsSummaryCard extends StatelessWidget {
   final Exercise exercise;
@@ -61,8 +62,8 @@ class StatsSummaryCard extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 20,
+          style: TextStyle(
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
             letterSpacing: -0.5,
@@ -71,8 +72,8 @@ class StatsSummaryCard extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
+          style: TextStyle(
+            fontSize: 12.sp,
             color: AppColors.textSecondary,
             fontWeight: FontWeight.w500,
           ),

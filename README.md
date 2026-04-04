@@ -2,14 +2,36 @@
 
 A premium, modern Flutter application designed to be your **Personal Gym OS**. Hobix helps athletes train smarter, track everything, and grow stronger with an intuitive, glassmorphic dark-themed interface.
 
-> *Note: UI Screenshots will be added here once the app reaches final production release.*
-> 
-> <!-- 
-> 📸 Placeholder for Screenshots: 
-> | Home Dashboard | Workout History | Log Measurement | Setup Flow |
-> | :---: | :---: | :---: | :---: |
-> | ![Home](screenshot_path) | ![History](screenshot_path) | ![Measures](screenshot_path) | ![Setup](screenshot_path) |
-> -->
+## 📱 App Experience
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Home Dashboard</b></td>
+      <td align="center"><b>Training Day Detail</b></td>
+      <td align="center"><b>Exercise Tracking</b></td>
+      <td align="center"><b>Profile Statistics</b></td>
+    </tr>
+    <tr>
+      <td><img src="assets/images/app_screenshot/HomeScreen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/TrainingDayDetailScreen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/ExerciseDetailScreen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/ProfileScreen.png" width="200"></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Weekly Schedule</b></td>
+      <td align="center"><b>Measurements</b></td>
+      <td align="center"><b>Page Switcher</b></td>
+      <td align="center"></td>
+    </tr>
+    <tr>
+      <td><img src="assets/images/app_screenshot/weekly_schedule_screen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/MeasuresListScreen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/SwitcerPage.png" width="200"></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
 
 ---
 
@@ -28,18 +50,20 @@ A premium, modern Flutter application designed to be your **Personal Gym OS**. H
 - **Interactive Calendar:** Built with `table_calendar` to visualize activity streaks, rest days, and workout frequencies at a glance.
 - **Daily Summaries:** Tap on any highlighted day to see exactly which workout route or exercises were completed.
 
-### ⏱️ Active Workout Sessions
-- **Live Session Engine:** Persistent bottom bar during active workouts with Start, Pause, and Finish controls.
-- **Timer & Duration Tracking:** Global `WorkoutTimerCubit` ensures your session time is perfectly recorded in the background.
+### ⏱️ Advanced Workout Session Engine
+- **Holistic Day Tracking:** Record the **total duration** of your entire workout, from the first "Start Workout" to the final "Finish" button.
+- **Auto-Syncing Dashboard:** The Home Screen automatically refreshes upon completing a session, giving you instant gratification with updated "Total Minutes" and "Last Workout" data.
+- **Live Timer:** Persistent backround timer managed via `WorkoutTimerCubit` with integrated state preservation.
 
-### 🗺️ Custom Workout Routes (Programs)
-- **Design Your Routine:** Create customized `WorkoutRoutes` and nest `RouteDays` to build 4-day splits, PPLs, or full-body programs.
-- **Exercise Library:** A rich, pre-seeded JSON library of 50+ exercises categorized by muscle groups with fast, interactive filter chips.
+### 🗺️ Dynamic UI & Content Management
+- **Edit on the Fly:** Modify exercise names, sets, or images directly from the training day detail view using the new `EditExerciseSheet`.
+- **Cancel Days:** Life happens. Easily revert a planned training day back to a **Rest Day** with the "Cancel Day" feature, which clears the schedule safely.
+- **Multi-Image Support:** Every exercise can now hold a gallery of reference images for better form guidance.
 
-### 👤 Profile & Dashboard Insights
-- **Dynamic Dashboard:** The Home Screen aggregates real data, displaying sets completed and active day achievements.
-- **Premium Profile UI:** Features a glowing avatar, "PRO" badge indicator, and glassmorphic horizontal scroll cards for Body Stats and Personal Records (e.g., Bench Press, Squat).
-- **Edit Profile:** Instantly update your display name and profile picture.
+### 🎨 Fully Responsive & Premium Aesthetics
+- **Pixel-Perfect Consistency:** Every font size, padding, and icon is precisely scaled for any screen resolution using the `flutter_screenutil` engine.
+- **Glassmorphic Theme:** Stunning dark mode with translucent background blur panels, neon accents, and smooth `AnimatedSwitcher` transitions.
+- **Dynamic Dashboard:** Real-time calculation of weekly workout frequency and lifetime exercise duration.
 
 ---
 

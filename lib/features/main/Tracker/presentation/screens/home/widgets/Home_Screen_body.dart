@@ -59,7 +59,7 @@ class HomeScreenBody extends StatelessWidget {
                               text: 'Welcome back, ',
                               style: GoogleFonts.spaceGrotesk(
                                 letterSpacing: -1,
-                                fontSize: 32,
+                                fontSize: 32.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
@@ -68,7 +68,7 @@ class HomeScreenBody extends StatelessWidget {
                               text: '$firstName ',
                               style: GoogleFonts.spaceGrotesk(
                                 letterSpacing: -1,
-                                fontSize: 32,
+                                fontSize: 32.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
                               ),
@@ -83,7 +83,7 @@ class HomeScreenBody extends StatelessWidget {
                   Text(
                     'Ready to crush your goals today?',
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -100,7 +100,7 @@ class HomeScreenBody extends StatelessWidget {
                   Text(
                     'Quick Stats',
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textSecondary,
                     ),
@@ -119,7 +119,7 @@ class HomeScreenBody extends StatelessWidget {
                     Text(
                       'Recent Progress',
                       style: GoogleFonts.spaceGrotesk(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textSecondary,
                       ),

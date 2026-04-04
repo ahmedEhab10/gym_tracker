@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
@@ -33,9 +34,9 @@ class CustomTextField extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -46,7 +47,7 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboardType,
           obscureText: obscureText,
           maxLines: maxLines,
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 16.sp),
           validator: validator,
           onChanged: onChanged,
           decoration: InputDecoration(

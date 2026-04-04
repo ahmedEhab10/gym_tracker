@@ -11,6 +11,7 @@ abstract class WorkoutLocalDataSource {
     DateTime? startDate,
     DateTime? endDate,
   });
+  Future<WorkoutSessionModel?> getWorkoutSession(String id);
   Future<List<ExerciseSetModel>> getSetsForSession(String sessionId);
 }
 
@@ -32,6 +33,15 @@ class WorkoutLocalDataSourceImpl implements WorkoutLocalDataSource {
   Future<void> updateWorkoutSession(WorkoutSessionModel session) async {
     try {
       await hiveService.workoutSessionBox.put(session.id, session);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<WorkoutSessionModel?> getWorkoutSession(String id) async {
+    try {
+      return hiveService.workoutSessionBox.get(id);
     } catch (e) {
       throw CacheException();
     }

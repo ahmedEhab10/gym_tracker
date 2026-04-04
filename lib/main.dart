@@ -22,14 +22,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(373.6, 812),
-      child: MaterialApp(
-        title: 'Gym Progress Tracker',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-
-        initialRoute: AppRoutes.splash,
-        onGenerateRoute: RouteGenerator.generateRoute,
-      ),
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Gym Progress Tracker',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.darkTheme,
+          initialRoute: AppRoutes.splash,
+          onGenerateRoute: RouteGenerator.generateRoute,
+        );
+      },
     );
   }
 }

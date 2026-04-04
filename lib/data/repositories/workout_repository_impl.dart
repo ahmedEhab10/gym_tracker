@@ -59,20 +59,21 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     String sessionId,
     String? notes,
   ) async {
-    // We need to fetch the session first (omitted simple get in datasource for brevity in previous step, but practically needed)
-    // For now assuming we construct updated object
-    // In real app, we should probably add getSession to datasource or just upsert
     try {
-      // Small workaround since we didn't add getSession(id) to interface yet
-      // Logic: Just fetching history and finding it or assuming UI passes full object?
-      // Better: Update Interface in next step if needed.
-      // For now, let's assume we fetch history to find it (inefficient) or better, just create object with available info
+      final model = await workoutLocalDataSource.getWorkoutSession(sessionId);
+      if (model == null) return const Left(CacheFailure());
 
-      // Ideally we need the original start time.
-      // I'll assume we can't do this properly without fetching.
-      // I will just implement a safe update if exist logic in datasource in future
+      final updatedModel = WorkoutSessionModel(
+        id: model.id,
+        trainingDayId: model.trainingDayId,
+        startTime: model.startTime,
+        endTime: DateTime.now(),
+        isCompleted: true,
+        notes: notes ?? model.notes,
+      );
 
-      return const Right(null); // Placeholder until we fix datasource interface
+      await workoutLocalDataSource.updateWorkoutSession(updatedModel);
+      return const Right(null);
     } on CacheException {
       return const Left(CacheFailure());
     }

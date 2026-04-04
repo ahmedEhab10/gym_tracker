@@ -12,6 +12,7 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exerci
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exercise/widgets/stats_summary_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
   final Exercise exercise;
@@ -89,8 +90,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     ],
                     Text(
                       state.exercise.name,
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style: TextStyle(
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
@@ -98,8 +99,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     const SizedBox(height: 8),
                     Text(
                       state.exercise.description,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: 16.sp,
                         color: AppColors.textSecondary,
                       ),
                     ),

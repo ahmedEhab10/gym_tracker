@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/domain/entities/exercise_history.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HistoryComparisonSection extends StatelessWidget {
   final ExerciseHistory history;
@@ -14,10 +15,10 @@ class HistoryComparisonSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Recent Performance',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
@@ -59,7 +60,7 @@ class HistoryComparisonSection extends StatelessWidget {
                 ),
               ),
               children: [
-                const TableRow(
+                TableRow(
                   children: [
                     Padding(
                       padding: EdgeInsets.all(12),
@@ -68,7 +69,7 @@ class HistoryComparisonSection extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                         ),
                       ),
                     ),
@@ -79,7 +80,7 @@ class HistoryComparisonSection extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -91,7 +92,7 @@ class HistoryComparisonSection extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                         ),
                         textAlign: TextAlign.right,
                       ),

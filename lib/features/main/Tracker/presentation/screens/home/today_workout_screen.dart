@@ -7,6 +7,7 @@ import 'package:try_my_tracker/domain/entities/exercise.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_event.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise/exercise_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TodayWorkoutScreen extends StatelessWidget {
   const TodayWorkoutScreen({super.key});
@@ -47,7 +48,7 @@ class TodayWorkoutScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -55,12 +56,12 @@ class TodayWorkoutScreen extends StatelessWidget {
           SizedBox(height: 16),
           Text(
             'No workout scheduled today',
-            style: TextStyle(fontSize: 18, color: AppColors.textSecondary),
+            style: TextStyle(fontSize: 18.sp, color: AppColors.textSecondary),
           ),
           SizedBox(height: 8),
           Text(
             'Enjoy your rest day!',
-            style: TextStyle(fontSize: 14, color: AppColors.textHint),
+            style: TextStyle(fontSize: 14.sp, color: AppColors.textHint),
           ),
         ],
       ),

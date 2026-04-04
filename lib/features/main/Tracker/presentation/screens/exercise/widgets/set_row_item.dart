@@ -4,7 +4,8 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/domain/entities/exercise_set.dart';
 import 'package:try_my_tracker/domain/entities/exercise_history.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_bloc.dart';
-import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_event.dart'; // Import Event
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise_detail/exercise_detail_event.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import Event
 
 class SetRowItem extends StatelessWidget {
   final ExerciseSet set;
@@ -83,10 +84,10 @@ class SetRowItem extends StatelessWidget {
                   ),
                   child: Text(
                     '${set.setNumber}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),
@@ -97,10 +98,10 @@ class SetRowItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Weight",
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           color: AppColors.textHint,
                         ),
                       ),
@@ -110,15 +111,15 @@ class SetRowItem extends StatelessWidget {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                         decoration: InputDecoration(
                           suffixText: 'kg',
-                          suffixStyle: const TextStyle(
-                            fontSize: 14,
+                          suffixStyle: TextStyle(
+                            fontSize: 14.sp,
                             color: AppColors.textHint,
                           ),
                           contentPadding: const EdgeInsets.symmetric(
@@ -155,10 +156,10 @@ class SetRowItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Reps",
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           color: AppColors.textHint,
                         ),
                       ),
@@ -167,10 +168,10 @@ class SetRowItem extends StatelessWidget {
                         initialValue: set.reps.toString(),
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
@@ -244,7 +245,7 @@ class SetRowItem extends StatelessWidget {
                     Text(
                       'Vol: ${setVolume.toStringAsFixed(1)} kg',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textHint.withOpacity(0.7),
                       ),

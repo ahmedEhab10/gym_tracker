@@ -9,6 +9,7 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/exercise
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exercise/widgets/set_row_item.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/rest_timer_dialog.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CurrentSessionSection extends StatelessWidget {
   final Exercise exercise;
@@ -42,10 +43,10 @@ class CurrentSessionSection extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Today\'s Session',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -53,8 +54,8 @@ class CurrentSessionSection extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Total Volume: ${totalVolume.toStringAsFixed(0)} kg',
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: TextStyle(
+                      fontSize: 13.sp,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),

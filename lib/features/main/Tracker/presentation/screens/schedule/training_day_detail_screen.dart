@@ -13,17 +13,22 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/workout_
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/exercise_card.dart';
 import 'package:uuid/uuid.dart';
 import 'package:try_my_tracker/domain/entities/exercise.dart';
+import 'package:try_my_tracker/domain/usecases/workout/workout_usecases.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/home/home_bloc.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TrainingDayDetailScreen extends StatelessWidget {
   final String dayName;
   final String dayId;
+  final int dayIndex;
 
   const TrainingDayDetailScreen({
     super.key,
     required this.dayName,
     required this.dayId,
+    required this.dayIndex,
   });
 
   @override
@@ -35,7 +40,7 @@ class TrainingDayDetailScreen extends StatelessWidget {
         ),
         BlocProvider(create: (_) => WorkoutTimerCubit()),
       ],
-      child: _TrainingDayDetailView(dayName: dayName, dayId: dayId),
+      child: _TrainingDayDetailView(dayName: dayName, dayId: dayId, dayIndex: dayIndex),
     );
   }
 }
@@ -43,8 +48,9 @@ class TrainingDayDetailScreen extends StatelessWidget {
 class _TrainingDayDetailView extends StatelessWidget {
   final String dayName;
   final String dayId;
+  final int dayIndex;
 
-  const _TrainingDayDetailView({required this.dayName, required this.dayId});
+  const _TrainingDayDetailView({required this.dayName, required this.dayId, required this.dayIndex});
 
   void _showAddExerciseSheet(BuildContext context) {
     final exerciseBloc = context.read<ExerciseBloc>();
@@ -52,8 +58,52 @@ class _TrainingDayDetailView extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _AddExerciseSheet(dayId: dayId, exerciseBloc: exerciseBloc),
+      builder: (_) => _EditExerciseSheet(dayId: dayId, exerciseBloc: exerciseBloc),
     );
+  }
+
+  void _showEditExerciseSheet(BuildContext context, Exercise exercise) {
+    final exerciseBloc = context.read<ExerciseBloc>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _EditExerciseSheet(
+        dayId: dayId, 
+        exerciseBloc: exerciseBloc, 
+        exercise: exercise,
+      ),
+    );
+  }
+
+  Future<void> _cancelDay(BuildContext context, List<Exercise> exercises) async {
+    final act = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text('Cancel Day?', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
+        content: Text('This will revert the day to a Rest Day and remove any exercises scheduled here. Are you sure?', style: GoogleFonts.spaceGrotesk(color: AppColors.textSecondary)),
+        actions: [
+          TextButton(
+             onPressed: () => Navigator.pop(ctx, false),
+             child: const Text('No'),
+          ),
+          ElevatedButton(
+             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+             onPressed: () => Navigator.pop(ctx, true),
+             child: const Text('Yes, Cancel', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      )
+    );
+    if (act == true && context.mounted) {
+      final bloc = context.read<ExerciseBloc>();
+      for (var ex in exercises) {
+        bloc.add(DeleteExerciseEvent(ex.id, dayId));
+      }
+      Navigator.pop(context, 'cancel_day');
+    }
   }
 
   @override
@@ -80,6 +130,13 @@ class _TrainingDayDetailView extends StatelessWidget {
                   icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle_outline_rounded, color: AppColors.error),
+                    tooltip: 'Cancel Day',
+                    onPressed: () => _cancelDay(context, exercises),
+                  ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
                   title: Column(
@@ -90,7 +147,7 @@ class _TrainingDayDetailView extends StatelessWidget {
                         dayName,
                         style: GoogleFonts.spaceGrotesk(
                           fontWeight: FontWeight.bold,
-                          fontSize: 26,
+                          fontSize: 26.sp,
                           color: Colors.white,
                           letterSpacing: -0.5,
                         ),
@@ -99,7 +156,7 @@ class _TrainingDayDetailView extends StatelessWidget {
                         Text(
                           '${exercises.length} exercise${exercises.length != 1 ? 's' : ''}',
                           style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: AppColors.primary.withValues(alpha: 0.8),
                             fontWeight: FontWeight.w500,
                           ),
@@ -154,6 +211,7 @@ class _TrainingDayDetailView extends StatelessWidget {
                               arguments: exercise,
                             );
                           },
+                          onEdit: () => _showEditExerciseSheet(context, exercise),
                         );
                       },
                       childCount: exercises.length,
@@ -193,12 +251,33 @@ class _TrainingDayDetailView extends StatelessWidget {
               return _BottomBar(
                 hasExercises: hasExercises,
                 timerState: timerState,
-                onStart: () => context.read<WorkoutTimerCubit>().startWorkout(),
-                onFinish: () {
-                  final duration =
-                      timerState is WorkoutInProgress ? timerState.durationSeconds : 0;
-                  context.read<WorkoutTimerCubit>().finishWorkout();
-                  _showFinishDialog(context, duration);
+                onStart: () async {
+                  final startWorkout = sl<StartWorkout>();
+                  final result = await startWorkout(dayId);
+                  result.fold(
+                    (failure) => null, // Potentially show error
+                    (session) => context.read<WorkoutTimerCubit>().startWorkout(session.id),
+                  );
+                },
+                onFinish: () async {
+                  if (timerState is WorkoutInProgress) {
+                    final duration = timerState.durationSeconds;
+                    final sessionId = timerState.sessionId;
+                    final completeWorkout = sl<CompleteWorkout>();
+                    await completeWorkout(CompleteWorkoutParams(sessionId: sessionId));
+                    
+                    if (context.mounted) {
+                      context.read<WorkoutTimerCubit>().finishWorkout();
+                      _showFinishDialog(context, duration);
+                      
+                      // Refresh Home Data if possible (HomeBloc should be global)
+                      try {
+                        context.read<HomeBloc>().add(LoadHomeData());
+                      } catch (_) {
+                        // HomeBloc might not be in context yet if we haven't refactored it
+                      }
+                    }
+                  }
                 },
               );
             },
@@ -243,7 +322,7 @@ class _TrainingDayDetailView extends StatelessWidget {
               Text(
                 'Workout Complete!',
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -253,7 +332,7 @@ class _TrainingDayDetailView extends StatelessWidget {
                 'Great job! You worked out for $label.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -343,7 +422,7 @@ class _BottomBar extends StatelessWidget {
               Text(
                 'Add exercises before starting a workout',
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   color: AppColors.warning,
                 ),
               ),
@@ -370,7 +449,7 @@ class _BottomBar extends StatelessWidget {
               'Start Workout',
               style: GoogleFonts.spaceGrotesk(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
           ),
@@ -406,7 +485,7 @@ class _BottomBar extends StatelessWidget {
               Text(
                 timeLabel,
                 style: GoogleFonts.spaceMono(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
                 ),
@@ -480,7 +559,7 @@ class _EmptyState extends StatelessWidget {
             Text(
               'No exercises yet',
               style: GoogleFonts.spaceGrotesk(
-                fontSize: 22,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -490,7 +569,7 @@ class _EmptyState extends StatelessWidget {
               'Tap "Add Exercise" below to start building your workout plan.',
               textAlign: TextAlign.center,
               style: GoogleFonts.spaceGrotesk(
-                fontSize: 14,
+                fontSize: 14.sp,
                 color: AppColors.textSecondary,
                 height: 1.5,
               ),
@@ -528,24 +607,39 @@ class _ErrorState extends StatelessWidget {
 // Add Exercise Bottom Sheet
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _AddExerciseSheet extends StatefulWidget {
+class _EditExerciseSheet extends StatefulWidget {
   final String dayId;
   final ExerciseBloc exerciseBloc;
+  final Exercise? exercise;
 
-  const _AddExerciseSheet({required this.dayId, required this.exerciseBloc});
+  const _EditExerciseSheet({required this.dayId, required this.exerciseBloc, this.exercise});
 
   @override
-  State<_AddExerciseSheet> createState() => _AddExerciseSheetState();
+  State<_EditExerciseSheet> createState() => _EditExerciseSheetState();
 }
 
-class _AddExerciseSheetState extends State<_AddExerciseSheet> {
+class _EditExerciseSheetState extends State<_EditExerciseSheet> {
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final youtubeController = TextEditingController();
-  final setsController = TextEditingController(text: '3');
+  late final TextEditingController nameController;
+  late final TextEditingController descriptionController;
+  late final TextEditingController youtubeController;
+  late final TextEditingController setsController;
   List<String> selectedImagePaths = [];
   bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.exercise?.name);
+    descriptionController = TextEditingController(text: widget.exercise?.description);
+    youtubeController = TextEditingController(text: widget.exercise?.youtubeLink);
+    setsController = TextEditingController(text: widget.exercise?.defaultSetsCount.toString() ?? '3');
+    if (widget.exercise?.imagePaths != null) {
+      selectedImagePaths = List.from(widget.exercise!.imagePaths!);
+    } else if (widget.exercise?.imagePath != null) {
+      selectedImagePaths = [widget.exercise!.imagePath!];
+    }
+  }
 
   @override
   void dispose() {
@@ -570,23 +664,40 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _isSaving = true);
 
-    final newExercise = Exercise(
-      id: const Uuid().v4(),
-      trainingDayId: widget.dayId,
-      name: nameController.text.trim(),
-      description: descriptionController.text.trim(),
-      orderIndex: 0,
-      imagePath: selectedImagePaths.isNotEmpty ? selectedImagePaths.first : null,
-      imagePaths: selectedImagePaths.isNotEmpty ? selectedImagePaths : null,
-      youtubeLink: youtubeController.text.trim().isEmpty
-          ? null
-          : youtubeController.text.trim(),
-      defaultSetsCount: int.tryParse(setsController.text) ?? 3,
-      lastUsedWeight: null,
-    );
-
-    widget.exerciseBloc.add(AddExerciseEvent(newExercise));
+    if (widget.exercise != null) {
+      final updatedExercise = widget.exercise!.copyWith(
+        name: nameController.text.trim(),
+        description: descriptionController.text.trim(),
+        imagePath: selectedImagePaths.isNotEmpty ? selectedImagePaths.first : null,
+        imagePaths: selectedImagePaths.isNotEmpty ? selectedImagePaths : null,
+        youtubeLink: youtubeController.text.trim().isEmpty ? null : youtubeController.text.trim(),
+        defaultSetsCount: int.tryParse(setsController.text) ?? 3,
+      );
+      widget.exerciseBloc.add(UpdateExerciseEvent(updatedExercise));
+    } else {
+      final newExercise = Exercise(
+        id: const Uuid().v4(),
+        trainingDayId: widget.dayId,
+        name: nameController.text.trim(),
+        description: descriptionController.text.trim(),
+        orderIndex: 0,
+        imagePath: selectedImagePaths.isNotEmpty ? selectedImagePaths.first : null,
+        imagePaths: selectedImagePaths.isNotEmpty ? selectedImagePaths : null,
+        youtubeLink: youtubeController.text.trim().isEmpty ? null : youtubeController.text.trim(),
+        defaultSetsCount: int.tryParse(setsController.text) ?? 3,
+        lastUsedWeight: null,
+      );
+      widget.exerciseBloc.add(AddExerciseEvent(newExercise));
+    }
+    
     Navigator.pop(context);
+  }
+
+  void _delete() {
+    if (widget.exercise != null) {
+      widget.exerciseBloc.add(DeleteExerciseEvent(widget.exercise!.id, widget.dayId));
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -625,9 +736,9 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
                   child: Row(
                     children: [
                       Text(
-                        'New Exercise',
+                        widget.exercise != null ? 'Edit Exercise' : 'New Exercise',
                         style: GoogleFonts.spaceGrotesk(
-                          fontSize: 22,
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -687,7 +798,7 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
                                       Text(
                                         'Add Images',
                                         style: GoogleFonts.spaceGrotesk(
-                                          fontSize: 12,
+                                          fontSize: 12.sp,
                                           color: AppColors.textSecondary,
                                         ),
                                       ),
@@ -856,12 +967,43 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
                               'Save Exercise',
                               style: GoogleFonts.spaceGrotesk(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 16.sp,
                               ),
                             ),
                     ),
                   ),
                 ),
+                if (widget.exercise != null)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      20,
+                      0,
+                      20,
+                      MediaQuery.of(context).viewInsets.bottom +
+                          MediaQuery.of(context).padding.bottom +
+                          16,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 54,
+                      child: OutlinedButton(
+                        onPressed: _delete,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.error,
+                          side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                        ),
+                        child: Text(
+                          'Delete Exercise',
+                          style: GoogleFonts.spaceGrotesk(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -874,7 +1016,7 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
     return Text(
       label,
       style: GoogleFonts.spaceGrotesk(
-        fontSize: 13,
+        fontSize: 13.sp,
         fontWeight: FontWeight.w600,
         color: AppColors.textSecondary,
         letterSpacing: 0.3,
@@ -899,14 +1041,14 @@ class _AddExerciseSheetState extends State<_AddExerciseSheet> {
       validator: validator,
       style: GoogleFonts.spaceGrotesk(
         color: Colors.white,
-        fontSize: 15,
+        fontSize: 15.sp,
       ),
       decoration: InputDecoration(
         hintText: hint,
         prefixIcon: prefixIcon,
         hintStyle: GoogleFonts.spaceGrotesk(
           color: AppColors.textHint,
-          fontSize: 14,
+          fontSize: 14.sp,
         ),
         filled: true,
         fillColor: AppColors.surface,

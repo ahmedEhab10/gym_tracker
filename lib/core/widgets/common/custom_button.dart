@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
@@ -51,8 +52,8 @@ class CustomButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
                 ),

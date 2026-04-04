@@ -23,6 +23,7 @@ import 'package:try_my_tracker/features/main/Tracker/domain/usecases/get_home_da
 import 'package:try_my_tracker/domain/repositories/workout_repository.dart';
 import 'package:try_my_tracker/data/repositories/workout_repository_impl.dart';
 import 'package:try_my_tracker/data/datasources/local/workout_local_datasource.dart';
+import 'package:try_my_tracker/domain/usecases/workout/workout_usecases.dart';
 import 'package:try_my_tracker/domain/usecases/measurement_usecases.dart';
 import 'package:try_my_tracker/domain/repositories/measurement_repository.dart';
 import 'package:try_my_tracker/data/repositories/measurement_repository_impl.dart';
@@ -44,9 +45,16 @@ Future<void> init() async {
   // UseCases
   sl.registerLazySingleton(() => GetExercisesForDay(sl()));
   sl.registerLazySingleton(() => AddExercise(sl()));
+  sl.registerLazySingleton(() => UpdateExercise(sl()));
+  sl.registerLazySingleton(() => DeleteExercise(sl()));
   // Blocs
   sl.registerFactory(
-    () => ExerciseBloc(getExercisesForDay: sl(), addExercise: sl()),
+    () => ExerciseBloc(
+      getExercisesForDay: sl(),
+      addExercise: sl(),
+      updateExercise: sl(),
+      deleteExercise: sl(),
+    ),
   );
 
   sl.registerFactory(
@@ -135,6 +143,10 @@ Future<void> init() async {
   sl.registerLazySingleton<WorkoutLocalDataSource>(
     () => WorkoutLocalDataSourceImpl(hiveService: sl()),
   );
+
+  // Use cases
+  sl.registerLazySingleton(() => StartWorkout(sl()));
+  sl.registerLazySingleton(() => CompleteWorkout(sl()));
 
   // ! Features - Program
   // Data sources

@@ -18,27 +18,31 @@ class ExerciseDetailLoaded extends ExerciseDetailState {
   final Exercise exercise;
   final ExerciseHistory history;
   final List<ExerciseSet> currentSets;
+  final DateTime sessionStartTime;
 
   const ExerciseDetailLoaded({
     required this.exercise,
     required this.history,
     required this.currentSets,
+    required this.sessionStartTime,
   });
 
   ExerciseDetailLoaded copyWith({
     Exercise? exercise,
     ExerciseHistory? history,
     List<ExerciseSet>? currentSets,
+    DateTime? sessionStartTime,
   }) {
     return ExerciseDetailLoaded(
       exercise: exercise ?? this.exercise,
       history: history ?? this.history,
       currentSets: currentSets ?? this.currentSets,
+      sessionStartTime: sessionStartTime ?? this.sessionStartTime,
     );
   }
 
   @override
-  List<Object?> get props => [exercise, history, currentSets];
+  List<Object?> get props => [exercise, history, currentSets, sessionStartTime];
 }
 
 class ExerciseDetailError extends ExerciseDetailState {

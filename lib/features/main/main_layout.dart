@@ -7,6 +7,7 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_s
 import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/profile/profile_cubit.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/profile_screen.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/home/home_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/Switcer_page.dart';
 
 class MainLayout extends StatefulWidget {
@@ -42,6 +43,9 @@ class _MainLayoutState extends State<MainLayout> {
         ),
         BlocProvider(
           create: (context) => di.sl<ProfileCubit>()..loadProfile(),
+        ),
+        BlocProvider(
+          create: (context) => di.sl<HomeBloc>()..add(LoadHomeData()),
         ),
       ],
       child: Scaffold(

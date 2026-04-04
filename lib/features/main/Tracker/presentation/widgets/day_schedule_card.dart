@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DayScheduleCard extends StatelessWidget {
   final String dayName;
@@ -57,7 +58,7 @@ class DayScheduleCard extends StatelessWidget {
                       Text(
                         dayName,
                         style: GoogleFonts.spaceGrotesk(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textSecondary,
                         ),
@@ -66,7 +67,7 @@ class DayScheduleCard extends StatelessWidget {
                       Text(
                         workoutName,
                         style: GoogleFonts.spaceGrotesk(
-                          fontSize: 20,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                           color: isRestDay ? AppColors.textHint : Colors.white,
                         ),

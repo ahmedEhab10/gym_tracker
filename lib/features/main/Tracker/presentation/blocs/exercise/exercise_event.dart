@@ -25,3 +25,22 @@ class AddExerciseEvent extends ExerciseEvent {
   @override
   List<Object> get props => [exercise];
 }
+
+class UpdateExerciseEvent extends ExerciseEvent {
+  final Exercise exercise;
+
+  const UpdateExerciseEvent(this.exercise);
+
+  @override
+  List<Object> get props => [exercise];
+}
+
+class DeleteExerciseEvent extends ExerciseEvent {
+  final String exerciseId;
+  final String trainingDayId;
+
+  const DeleteExerciseEvent(this.exerciseId, this.trainingDayId);
+
+  @override
+  List<Object> get props => [exerciseId, trainingDayId];
+}

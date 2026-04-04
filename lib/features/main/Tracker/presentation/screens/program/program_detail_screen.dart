@@ -6,6 +6,7 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_event.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProgramDetailScreen extends StatefulWidget {
   final String programId;
@@ -74,7 +75,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                         Text(
                           program.name,
                           style: GoogleFonts.spaceGrotesk(
-                            fontSize: 28,
+                            fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -84,7 +85,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                           Text(
                             program.description,
                             style: GoogleFonts.inter(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               color: AppColors.textSecondary,
                             ),
                           ),
@@ -93,7 +94,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                         Text(
                           'Schedule (${days.length} Days)',
                           style: GoogleFonts.spaceGrotesk(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
@@ -118,7 +119,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                           Text(
                             'No training days yet',
                             style: GoogleFonts.inter(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               color: AppColors.textSecondary,
                             ),
                           ),
@@ -126,7 +127,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                           Text(
                             'Add a day to start (e.g., Push Day)',
                             style: GoogleFonts.inter(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: AppColors.textHint,
                             ),
                           ),
@@ -221,7 +222,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                                     style: GoogleFonts.spaceGrotesk(
                                       color: AppColors.primary,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 18.sp,
                                     ),
                                   ),
                                 ),
@@ -229,7 +230,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                                   day.name,
                                   style: GoogleFonts.spaceGrotesk(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -239,7 +240,7 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                                     '${day.exerciseIds.length} Exercises',
                                     style: GoogleFonts.inter(
                                       color: AppColors.textSecondary,
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                     ),
                                   ),
                                 ),

@@ -21,7 +21,7 @@ class SwitcerPage extends StatelessWidget {
               Text(
                 'Training Mode',
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 32,
+                  fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -30,7 +30,7 @@ class SwitcerPage extends StatelessWidget {
               Text(
                 'Choose how you want to train today',
                 style: GoogleFonts.inter(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -104,7 +104,7 @@ class SwitcerPage extends StatelessWidget {
                   Text(
                     title,
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -113,7 +113,7 @@ class SwitcerPage extends StatelessWidget {
                   Text(
                     description,
                     style: GoogleFonts.inter(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),

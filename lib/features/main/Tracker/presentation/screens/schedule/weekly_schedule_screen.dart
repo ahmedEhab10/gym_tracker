@@ -8,6 +8,7 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_s
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/weekly_schedule/weekly_schedule_state.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/day_schedule_card.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/widgets/edit_day_name_dialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WeeklyScheduleScreen extends StatelessWidget {
   const WeeklyScheduleScreen({super.key});
@@ -44,7 +45,7 @@ class WeeklyScheduleScreen extends StatelessWidget {
                       'Your Weekly Plan',
                       style: GoogleFonts.spaceGrotesk(
                         fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -75,15 +76,24 @@ class WeeklyScheduleScreen extends StatelessWidget {
                         dayName: day,
                         workoutName: workoutName,
                         isRestDay: isRestDay,
-                        onTap: () {
-                          Navigator.pushNamed(
+                        onTap: () async {
+                          final result = await Navigator.pushNamed(
                             context,
                             AppRoutes.trainingDayDetail,
                             arguments: {
                               'dayName': day,
                               'dayId': 'temp_id_$index',
+                              'dayIndex': index,
                             },
                           );
+                          if (result == 'cancel_day' && context.mounted) {
+                            context.read<WeeklyScheduleBloc>().add(
+                              UpdateDayNameEvent(
+                                dayIndex: index,
+                                name: 'Rest Day',
+                              ),
+                            );
+                          }
                         },
                         onEdit: () =>
                             _showEditDialog(context, index, day, workoutName),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestTimerDialog extends StatefulWidget {
   final int initialDurationSeconds;
@@ -80,7 +81,7 @@ class _RestTimerDialogState extends State<RestTimerDialog> {
           Text(
             'Rest Timer',
             style: GoogleFonts.spaceGrotesk(
-              fontSize: 18,
+              fontSize: 18.sp,
               color: AppColors.textSecondary,
             ),
           ),
@@ -88,7 +89,7 @@ class _RestTimerDialogState extends State<RestTimerDialog> {
           Text(
             _formatTime(_remainingSeconds),
             style: GoogleFonts.spaceGrotesk(
-              fontSize: 48,
+              fontSize: 48.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

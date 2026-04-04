@@ -76,12 +76,13 @@ class RouteGenerator {
           ),
         );
       case AppRoutes.trainingDayDetail:
-        // Expected arguments: {'dayName': String, 'dayId': String}
+        // Expected arguments: {'dayName': String, 'dayId': String, 'dayIndex': int}
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => TrainingDayDetailScreen(
             dayName: args['dayName'],
             dayId: args['dayId'],
+            dayIndex: args['dayIndex'] ?? 0,
           ),
         );
       case AppRoutes.exerciseDetail:

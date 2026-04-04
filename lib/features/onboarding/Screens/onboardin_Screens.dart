@@ -46,7 +46,7 @@ class _OnboardinScreensState extends State<OnboardinScreens> {
                   Text(
                     currentScreen.title,
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 42,
+                      fontSize: 42.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -54,7 +54,7 @@ class _OnboardinScreensState extends State<OnboardinScreens> {
                   Text(
                     currentScreen.description,
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),

@@ -66,6 +66,7 @@ class ExerciseDetailBloc
             exercise: event.exercise,
             history: history,
             currentSets: currentSets,
+            sessionStartTime: DateTime.now(),
           ),
         );
       },
@@ -140,7 +141,8 @@ class ExerciseDetailBloc
       final session = WorkoutSession(
         id: sessionId,
         trainingDayId: loadedState.exercise.trainingDayId,
-        startTime: now,
+        startTime: loadedState.sessionStartTime,
+        endTime: now,
         isCompleted: true,
       );
 

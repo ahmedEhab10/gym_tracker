@@ -7,11 +7,19 @@ import 'exercise_state.dart';
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   final GetExercisesForDay getExercisesForDay;
   final AddExercise addExercise;
+  final UpdateExercise updateExercise;
+  final DeleteExercise deleteExercise;
 
-  ExerciseBloc({required this.getExercisesForDay, required this.addExercise})
-    : super(ExerciseInitial()) {
+  ExerciseBloc({
+    required this.getExercisesForDay,
+    required this.addExercise,
+    required this.updateExercise,
+    required this.deleteExercise,
+  }) : super(ExerciseInitial()) {
     on<LoadExercises>(_onLoadExercises);
     on<AddExerciseEvent>(_onAddExercise);
+    on<UpdateExerciseEvent>(_onUpdateExercise);
+    on<DeleteExerciseEvent>(_onDeleteExercise);
   }
 
   Future<void> _onLoadExercises(
@@ -47,6 +55,44 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
         final loadResult = await getExercisesForDay(
           event.exercise.trainingDayId,
         );
+        loadResult.fold(
+          (failure) => emit(ExerciseError(_mapFailureToMessage(failure))),
+          (exercises) => emit(ExerciseLoaded(exercises)),
+        );
+      },
+    );
+  }
+
+  Future<void> _onUpdateExercise(
+    UpdateExerciseEvent event,
+    Emitter<ExerciseState> emit,
+  ) async {
+    emit(ExerciseLoading());
+    final result = await updateExercise(event.exercise);
+    await result.fold(
+      (failure) async => emit(ExerciseError(_mapFailureToMessage(failure))),
+      (_) async {
+        final loadResult = await getExercisesForDay(
+          event.exercise.trainingDayId,
+        );
+        loadResult.fold(
+          (failure) => emit(ExerciseError(_mapFailureToMessage(failure))),
+          (exercises) => emit(ExerciseLoaded(exercises)),
+        );
+      },
+    );
+  }
+
+  Future<void> _onDeleteExercise(
+    DeleteExerciseEvent event,
+    Emitter<ExerciseState> emit,
+  ) async {
+    emit(ExerciseLoading());
+    final result = await deleteExercise(event.exerciseId);
+    await result.fold(
+      (failure) async => emit(ExerciseError(_mapFailureToMessage(failure))),
+      (_) async {
+        final loadResult = await getExercisesForDay(event.trainingDayId);
         loadResult.fold(
           (failure) => emit(ExerciseError(_mapFailureToMessage(failure))),
           (exercises) => emit(ExerciseLoaded(exercises)),

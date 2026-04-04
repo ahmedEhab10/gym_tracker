@@ -6,6 +6,7 @@ import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_bloc.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_event.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/blocs/program/program_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProgramListScreen extends StatelessWidget {
   const ProgramListScreen({super.key});
@@ -108,7 +109,7 @@ class ProgramListScreen extends StatelessWidget {
           Text(
             'No Custom Programs',
             style: GoogleFonts.spaceGrotesk(
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -117,7 +118,7 @@ class ProgramListScreen extends StatelessWidget {
           Text(
             'Create a split to get started',
             style: GoogleFonts.inter(
-              fontSize: 16,
+              fontSize: 16.sp,
               color: AppColors.textSecondary,
             ),
           ),
@@ -311,7 +312,7 @@ class _ProgramCard extends StatelessWidget {
                   Text(
                     program.name,
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -321,7 +322,7 @@ class _ProgramCard extends StatelessWidget {
                     Text(
                       program.description,
                       style: GoogleFonts.inter(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         color: AppColors.textSecondary,
                       ),
                       maxLines: 1,
