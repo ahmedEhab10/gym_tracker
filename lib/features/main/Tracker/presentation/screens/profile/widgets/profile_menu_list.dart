@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/measurement/measurement_cubit.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/measures/measures_list_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profile/workout_history_screen.dart';
 class ProfileMenuList extends StatelessWidget {
@@ -34,12 +36,16 @@ class ProfileMenuList extends StatelessWidget {
           icon: Icons.straighten,
           title: 'Measures',
           onTap: () {
+            final measurementCubit = context.read<MeasurementCubit>();
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MeasuresListScreen(),
+                builder: (_) => const MeasuresListScreen(),
               ),
-            );
+            ).then((_) {
+              // Refresh body stats on the profile screen after returning
+              measurementCubit.loadMeasurements();
+            });
           },
         ),
       ],

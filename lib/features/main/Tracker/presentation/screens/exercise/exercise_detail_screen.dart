@@ -11,6 +11,7 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exerci
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exercise/widgets/history_comparison_section.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/exercise/widgets/stats_summary_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 class ExerciseDetailScreen extends StatefulWidget {
   final Exercise exercise;
@@ -22,6 +23,8 @@ class ExerciseDetailScreen extends StatefulWidget {
 }
 
 class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
+  int _currentImageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,26 +37,54 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             if (state is ExerciseDetailLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ExerciseDetailLoaded) {
+              final images = (state.exercise.imagePaths != null && state.exercise.imagePaths!.isNotEmpty)
+                  ? state.exercise.imagePaths!
+                  : (state.exercise.imagePath != null ? [state.exercise.imagePath!] : <String>[]);
+
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (state.exercise.imagePath != null) ...[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: state.exercise.imagePath!.startsWith('assets')
-                            ? Image.asset(
-                                state.exercise.imagePath!,
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(state.exercise.imagePath!),
-                                height: 200,
-                                fit: BoxFit.cover,
-                              ),
+                    if (images.isNotEmpty) ...[
+                      SizedBox(
+                        height: 200,
+                        child: PageView.builder(
+                          itemCount: images.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentImageIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            final path = images[index];
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: path.startsWith('assets')
+                                  ? Image.asset(path, fit: BoxFit.cover)
+                                  : Image.file(File(path), fit: BoxFit.cover),
+                            );
+                          },
+                        ),
                       ),
+                      if (images.length > 1) ...[
+                        const SizedBox(height: 12),
+                        Center(
+                          child: DotsIndicator(
+                            dotsCount: images.length,
+                            position: _currentImageIndex.toDouble(),
+                            decorator: DotsDecorator(
+                              activeColor: AppColors.primary,
+                              color: AppColors.textHint.withValues(alpha: 0.3),
+                              size: const Size.square(6.0),
+                              activeSize: const Size(18.0, 6.0),
+                              activeShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 16),
                     ],
                     Text(

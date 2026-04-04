@@ -6,6 +6,7 @@ class Exercise extends Equatable {
   final String name;
   final String description;
   final String? imagePath;
+  final List<String>? imagePaths;
   final String? youtubeLink;
   final String? notes;
   final double? lastUsedWeight;
@@ -18,6 +19,7 @@ class Exercise extends Equatable {
     required this.name,
     required this.description,
     this.imagePath,
+    this.imagePaths,
     this.youtubeLink,
     this.notes,
     this.lastUsedWeight,
@@ -32,6 +34,7 @@ class Exercise extends Equatable {
     name,
     description,
     imagePath,
+    imagePaths,
     youtubeLink,
     notes,
     lastUsedWeight,
@@ -45,6 +48,7 @@ class Exercise extends Equatable {
     String? name,
     String? description,
     String? imagePath,
+    List<String>? imagePaths,
     String? youtubeLink,
     String? notes,
     double? lastUsedWeight,
@@ -57,6 +61,7 @@ class Exercise extends Equatable {
       name: name ?? this.name,
       description: description ?? this.description,
       imagePath: imagePath ?? this.imagePath,
+      imagePaths: imagePaths ?? this.imagePaths,
       youtubeLink: youtubeLink ?? this.youtubeLink,
       notes: notes ?? this.notes,
       lastUsedWeight: lastUsedWeight ?? this.lastUsedWeight,

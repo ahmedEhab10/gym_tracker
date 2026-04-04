@@ -35,12 +35,16 @@ class ExerciseModel extends HiveObject {
   @HiveField(9)
   final int defaultSetsCount;
 
+  @HiveField(10)
+  final List<String>? imagePaths;
+
   ExerciseModel({
     required this.id,
     required this.trainingDayId,
     required this.name,
     required this.description,
     this.imagePath,
+    this.imagePaths,
     this.youtubeLink,
     this.notes,
     this.lastUsedWeight,
@@ -55,6 +59,7 @@ class ExerciseModel extends HiveObject {
       name: entity.name,
       description: entity.description,
       imagePath: entity.imagePath,
+      imagePaths: entity.imagePaths,
       youtubeLink: entity.youtubeLink,
       notes: entity.notes,
       lastUsedWeight: entity.lastUsedWeight,
@@ -70,6 +75,7 @@ class ExerciseModel extends HiveObject {
       name: name,
       description: description,
       imagePath: imagePath,
+      imagePaths: imagePaths,
       youtubeLink: youtubeLink,
       notes: notes,
       lastUsedWeight: lastUsedWeight,

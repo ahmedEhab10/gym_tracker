@@ -22,6 +22,7 @@ class ExerciseModelAdapter extends TypeAdapter<ExerciseModel> {
       name: fields[2] as String,
       description: fields[3] as String,
       imagePath: fields[4] as String?,
+      imagePaths: (fields[10] as List?)?.cast<String>(),
       youtubeLink: fields[5] as String?,
       notes: fields[6] as String?,
       lastUsedWeight: fields[7] as double?,
@@ -33,7 +34,7 @@ class ExerciseModelAdapter extends TypeAdapter<ExerciseModel> {
   @override
   void write(BinaryWriter writer, ExerciseModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class ExerciseModelAdapter extends TypeAdapter<ExerciseModel> {
       ..writeByte(8)
       ..write(obj.orderIndex)
       ..writeByte(9)
-      ..write(obj.defaultSetsCount);
+      ..write(obj.defaultSetsCount)
+      ..writeByte(10)
+      ..write(obj.imagePaths);
   }
 
   @override

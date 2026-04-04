@@ -18,8 +18,8 @@ class WorkoutSession extends Equatable {
   });
 
   Duration get duration {
-    final end = endTime ?? DateTime.now();
-    return end.difference(startTime);
+    if (endTime == null) return Duration.zero;
+    return endTime!.difference(startTime);
   }
 
   @override
