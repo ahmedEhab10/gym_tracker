@@ -15,6 +15,7 @@ abstract class ExerciseLocalDataSource {
   Future<List<ExerciseSetModel>> getSetsForExercise(String exerciseId);
   Future<void> saveSets(String exerciseId, List<ExerciseSetModel> sets);
   Future<void> updateSet(ExerciseSetModel set);
+  Future<void> deleteSets(List<String> setIds);
 
   Future<WorkoutSessionModel?> getWorkoutSession(String id);
   Future<void> saveWorkoutSession(WorkoutSessionModel session);
@@ -139,6 +140,17 @@ class ExerciseLocalDataSourceImpl implements ExerciseLocalDataSource {
   Future<void> updateSet(ExerciseSetModel set) async {
     try {
       await hiveService.exerciseSetBox.put(set.id, set);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<void> deleteSets(List<String> setIds) async {
+    try {
+      for (var id in setIds) {
+        await hiveService.exerciseSetBox.delete(id);
+      }
     } catch (e) {
       throw CacheException();
     }

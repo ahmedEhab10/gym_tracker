@@ -129,6 +129,15 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
   }
 
   @override
+  Future<Either<Failure, void>> deleteSets(List<String> setIds) async {
+    try {
+      return Right(await localDataSource.deleteSets(setIds));
+    } on CacheException {
+      return const Left(CacheFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, ExerciseHistory>> getExerciseHistory(
     String exerciseId,
   ) async {

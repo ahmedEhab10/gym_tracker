@@ -37,6 +37,23 @@ class ExerciseDetailBloc
           emit(const ExerciseDetailError('Failed to load history')),
       (history) async {
         final now = DateTime.now();
+        
+        // 1. Identify and clear "stale" sets (sets from previous days with no session ID)
+        final allSetsResult = await exerciseRepository.getSetsForExercise(event.exercise.id);
+        allSetsResult.fold(
+          (failure) => null,
+          (allSets) async {
+            final staleSetIds = allSets
+                .where((s) => s.workoutSessionId == null && s.completedAt != null && !_isSameDay(s.completedAt!, now))
+                .map((s) => s.id)
+                .toList();
+            
+            if (staleSetIds.isNotEmpty) {
+              await exerciseRepository.deleteSets(staleSetIds);
+            }
+          },
+        );
+
         final todaySession = history.sessions
             .cast<ExerciseSession?>()
             .firstWhere(
@@ -47,18 +64,28 @@ class ExerciseDetailBloc
         List<ExerciseSet> currentSets = todaySession?.sets ?? [];
 
         if (currentSets.isEmpty) {
-          // Pre-populate with default sets count
-          currentSets = List.generate(
-            event.exercise.defaultSetsCount,
-            (index) => ExerciseSet(
-              id: 'temp_${DateTime.now().millisecondsSinceEpoch}_$index',
-              exerciseId: event.exercise.id,
-              setNumber: index + 1,
-              reps: 10,
-              weight: event.exercise.lastUsedWeight ?? 0,
-              isCompleted: false,
-            ),
-          );
+          // Check for today's "loose" sets (sets added today but no session yet)
+          final looseSetsResult = await exerciseRepository.getSetsForExercise(event.exercise.id);
+          final todayLooseSets = looseSetsResult.getOrElse(() => [])
+              .where((s) => s.workoutSessionId == null && (s.completedAt == null || _isSameDay(s.completedAt!, now)))
+              .toList();
+          
+          if (todayLooseSets.isNotEmpty) {
+            currentSets = todayLooseSets;
+          } else {
+            // Pre-populate with default sets count
+            currentSets = List.generate(
+              event.exercise.defaultSetsCount,
+              (index) => ExerciseSet(
+                id: 'temp_${DateTime.now().millisecondsSinceEpoch}_$index',
+                exerciseId: event.exercise.id,
+                setNumber: index + 1,
+                reps: 10,
+                weight: event.exercise.lastUsedWeight ?? 0,
+                isCompleted: false,
+              ),
+            );
+          }
         }
 
         emit(
@@ -98,13 +125,24 @@ class ExerciseDetailBloc
   ) async {
     if (state is ExerciseDetailLoaded) {
       final loadedState = state as ExerciseDetailLoaded;
+      
+      // Auto-set completedAt if not already set and isCompleted is true
+      var updatedSet = event.set;
+      final oldSet = loadedState.currentSets.cast<ExerciseSet?>().firstWhere((s) => s?.id == event.set.id, orElse: () => null);
+      
+      if (updatedSet.isCompleted && (oldSet == null || !oldSet.isCompleted)) {
+        updatedSet = updatedSet.copyWith(completedAt: DateTime.now());
+      } else if (!updatedSet.isCompleted) {
+        updatedSet = updatedSet.copyWith(completedAt: null);
+      }
+
       final newSets = loadedState.currentSets
-          .map((s) => s.id == event.set.id ? event.set : s)
+          .map((s) => s.id == updatedSet.id ? updatedSet : s)
           .toList();
 
       emit(loadedState.copyWith(currentSets: newSets));
 
-      await exerciseRepository.updateSet(event.set);
+      await exerciseRepository.updateSet(updatedSet);
     }
   }
 
@@ -151,7 +189,7 @@ class ExerciseDetailBloc
             (s) => s.copyWith(
               workoutSessionId: sessionId,
               isCompleted: true,
-              completedAt: now,
+              completedAt: s.completedAt ?? now,
             ),
           )
           .toList();

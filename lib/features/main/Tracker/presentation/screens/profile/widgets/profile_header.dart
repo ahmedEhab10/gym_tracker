@@ -38,10 +38,7 @@ class ProfileHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.card,
-                    border: Border.all(
-                      color: AppColors.primary,
-                      width: 3.w,
-                    ),
+                    border: Border.all(color: AppColors.primary, width: 3.w),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.5),
@@ -49,7 +46,9 @@ class ProfileHeader extends StatelessWidget {
                         spreadRadius: 2,
                       ),
                     ],
-                    image: profilePicPath != null && File(profilePicPath).existsSync()
+                    image:
+                        profilePicPath != null &&
+                            File(profilePicPath).existsSync()
                         ? DecorationImage(
                             image: FileImage(File(profilePicPath)),
                             fit: BoxFit.cover,
@@ -60,22 +59,22 @@ class ProfileHeader extends StatelessWidget {
                           ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Text(
-                    'PRO',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                //   decoration: BoxDecoration(
+                //     color: AppColors.primary,
+                //     borderRadius: BorderRadius.circular(12.r),
+                //   ),
+                //   child: Text(
+                //     'PRO',
+                //     style: GoogleFonts.spaceGrotesk(
+                //       fontSize: 10.sp,
+                //       fontWeight: FontWeight.w700,
+                //       color: Colors.black,
+                //       letterSpacing: 0.5,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             SizedBox(height: 16.h),
@@ -87,58 +86,64 @@ class ProfileHeader extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-        SizedBox(height: 4.h),
-        Text(
-          'Member since Jan 2023',
-          style: GoogleFonts.spaceGrotesk(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        SizedBox(height: 24.h),
-        Row(
-          children: [
-            Expanded(
-              child: CustomButton(
-                label: 'Edit Profile',
-                onPressed: () {
-                  if (currentProfile != null) {
-                    final profileCubit = context.read<ProfileCubit>();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: profileCubit,
-                          child: EditProfileScreen(currentProfile: currentProfile!),
-                        ),
-                      ),
-                    );
-                  }
-                },
-                borderradius: 25,
-                height: 45.h,
+            SizedBox(height: 4.h),
+            Text(
+              'Member since Jan 2023',
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textSecondary,
               ),
             ),
-            SizedBox(width: 12.w),
-            Container(
-              height: 45.h,
-              width: 45.h,
-              decoration: BoxDecoration(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.share, color: AppColors.primary, size: 20),
-                onPressed: () {},
-                splashRadius: 24,
-              ),
+            SizedBox(height: 24.h),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    label: 'Edit Profile',
+                    onPressed: () {
+                      if (currentProfile != null) {
+                        final profileCubit = context.read<ProfileCubit>();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: profileCubit,
+                              child: EditProfileScreen(
+                                currentProfile: currentProfile!,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    borderradius: 25,
+                    height: 45.h,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Container(
+                  height: 45.h,
+                  width: 45.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.share,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    onPressed: () {},
+                    splashRadius: 24,
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
-  },
-);
   }
 }

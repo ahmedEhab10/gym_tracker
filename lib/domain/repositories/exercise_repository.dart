@@ -32,4 +32,5 @@ abstract class ExerciseRepository {
     List<ExerciseSet> sets,
   );
   Future<Either<Failure, void>> updateSet(ExerciseSet set);
+  Future<Either<Failure, void>> deleteSets(List<String> setIds);
 }
