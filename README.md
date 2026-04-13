@@ -8,12 +8,14 @@ A premium, modern Flutter application designed to be your **Personal Gym OS**. H
   <table>
     <tr>
       <td align="center"><b>Home Dashboard</b></td>
+      <td align="center"><b>Empty Dashboard</b></td>
       <td align="center"><b>Training Day Detail</b></td>
       <td align="center"><b>Exercise Tracking</b></td>
       <td align="center"><b>Profile Statistics</b></td>
     </tr>
     <tr>
       <td><img src="assets/images/app_screenshot/HomeScreen.png" width="200"></td>
+      <td><img src="assets/images/app_screenshot/Empity_homescreen.png" width="200"></td>
       <td><img src="assets/images/app_screenshot/TrainingDayDetailScreen.png" width="200"></td>
       <td><img src="assets/images/app_screenshot/ExerciseDetailScreen.png" width="200"></td>
       <td><img src="assets/images/app_screenshot/ProfileScreen.png" width="200"></td>

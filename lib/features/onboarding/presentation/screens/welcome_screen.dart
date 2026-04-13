@@ -3,9 +3,26 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:try_my_tracker/features/onboarding/data/models/onboarding_item.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final item in OnboardingItem.items) {
+        precacheImage(AssetImage(item.image), context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 180.h,
                   fit: BoxFit.contain,
                 ),
-              ),
+              ).animate().fade(duration: 600.ms).scale(begin: const Offset(0.8, 0.8), duration: 600.ms, curve: Curves.easeOutBack),
 
               // Headline
               Text(
@@ -37,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                   height: 1.2,
                 ),
-              ),
+              ).animate().fade(delay: 300.ms, duration: 500.ms).slideY(begin: 0.1, duration: 500.ms),
 
               SizedBox(height: 16.h),
 
@@ -49,28 +66,28 @@ class WelcomeScreen extends StatelessWidget {
                   fontSize: 15.sp,
                   height: 1.65,
                 ),
-              ),
+              ).animate().fade(delay: 500.ms, duration: 500.ms).slideY(begin: 0.1, duration: 500.ms),
 
               SizedBox(height: 40.h),
 
               // Feature list
-              _FeatureRow(
+              const _FeatureRow(
                 icon: Icons.fitness_center_rounded,
                 title: 'Workout Tracking',
                 subtitle: 'Log sets, reps, and weights with ease.',
-              ),
+              ).animate().fade(delay: 700.ms, duration: 500.ms).slideX(begin: 0.05, duration: 500.ms),
               SizedBox(height: 18.h),
-              _FeatureRow(
+              const _FeatureRow(
                 icon: Icons.straighten_rounded,
                 title: 'Body Measurements',
                 subtitle: 'Track your body composition over time.',
-              ),
+              ).animate().fade(delay: 850.ms, duration: 500.ms).slideX(begin: 0.05, duration: 500.ms),
               SizedBox(height: 18.h),
-              _FeatureRow(
+              const _FeatureRow(
                 icon: Icons.calendar_today_rounded,
                 title: 'Workout History',
                 subtitle: 'See every session on a clear calendar.',
-              ),
+              ).animate().fade(delay: 1000.ms, duration: 500.ms).slideX(begin: 0.05, duration: 500.ms),
 
               const Spacer(flex: 3),
 
@@ -100,7 +117,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ).animate().fade(delay: 1200.ms, duration: 500.ms).slideY(begin: 0.2, duration: 500.ms),
 
               SizedBox(height: 24.h),
             ],

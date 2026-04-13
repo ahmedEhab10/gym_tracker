@@ -52,13 +52,13 @@ class TodayWorkoutScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.fitness_center, size: 64, color: AppColors.textHint),
-          SizedBox(height: 16),
+          const Icon(Icons.fitness_center, size: 64, color: AppColors.textHint),
+          const SizedBox(height: 16),
           Text(
             'No workout scheduled today',
             style: TextStyle(fontSize: 18.sp, color: AppColors.textSecondary),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Enjoy your rest day!',
             style: TextStyle(fontSize: 14.sp, color: AppColors.textHint),

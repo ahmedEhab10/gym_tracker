@@ -14,7 +14,6 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profil
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
@@ -89,7 +88,7 @@ class ProfileHeader extends StatelessWidget {
               ),
             ),
             SizedBox(height: 4.h),
-            _MemberSinceLabel(),
+            const _MemberSinceLabel(),
             SizedBox(height: 24.h),
             Row(
               children: [
@@ -158,8 +157,18 @@ class _MemberSinceLabelState extends State<_MemberSinceLabel> {
     final date = DateTime.tryParse(isoDate);
     if (date == null) return '—';
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return 'Member since ${months[date.month - 1]} ${date.year}';
   }

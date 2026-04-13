@@ -30,7 +30,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           fontFamily: 'Poppins',
         ),
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
 
       cardTheme: CardThemeData(

@@ -63,7 +63,7 @@ class HistoryComparisonSection extends StatelessWidget {
                 TableRow(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Text(
                         'Date',
                         style: TextStyle(
@@ -74,7 +74,7 @@ class HistoryComparisonSection extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Text(
                         'Best Set',
                         style: TextStyle(
@@ -86,7 +86,7 @@ class HistoryComparisonSection extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Text(
                         'Volume',
                         style: TextStyle(

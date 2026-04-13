@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 import 'package:try_my_tracker/features/onboarding/data/models/onboarding_item.dart';
 
@@ -16,6 +17,16 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final item in OnboardingItem.items) {
+        precacheImage(AssetImage(item.image), context);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -75,10 +86,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        // Dark Overlay
+        // Gradient Overlay
         Positioned.fill(
           child: Container(
-            color: Colors.black.withOpacity(0.6),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.4),
+                  Colors.black.withOpacity(0.9),
+                ],
+                stops: const [0.0, 0.4, 1.0],
+              ),
+            ),
           ),
         ),
         // Content
@@ -96,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
-                ),
+                ).animate(key: ValueKey('title_${item.title}')).fade(duration: 400.ms).slideY(begin: 0.1, duration: 400.ms),
                 SizedBox(height: 8.h),
                 Text(
                   item.description,
@@ -105,7 +127,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     fontWeight: FontWeight.w600,
                     color: AppColors.textSecondary,
                   ),
-                ),
+                ).animate(key: ValueKey('desc_${item.title}')).fade(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1, duration: 400.ms, delay: 100.ms),
                 SizedBox(height: 120.h), // Space for bottom section
               ],
             ),
