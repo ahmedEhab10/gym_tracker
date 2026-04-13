@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:try_my_tracker/core/routes/app_routes.dart';
 import 'package:try_my_tracker/core/di/injection_container.dart' as di;
-import 'package:try_my_tracker/features/Splash/spalsh_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/home/Home_Screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/program/program_list_screen.dart';
 import 'package:try_my_tracker/features/main/Tracker/presentation/screens/program/program_detail_screen.dart';
@@ -24,9 +23,6 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/cubits/measure
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoutes.splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
-
       case AppRoutes.mainLayout:
         return MaterialPageRoute(builder: (_) => const MainLayout());
 

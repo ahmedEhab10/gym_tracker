@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/domain/entities/home_dashboard_data.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 class WorkOutInfoCard extends StatelessWidget {
   final RecentWorkoutData? lastWorkout;
@@ -110,41 +111,8 @@ class WorkOutInfoCard extends StatelessWidget {
   }
 }
 
-class _EmptyWorkoutStateCard extends StatefulWidget {
+class _EmptyWorkoutStateCard extends StatelessWidget {
   const _EmptyWorkoutStateCard();
-
-  @override
-  State<_EmptyWorkoutStateCard> createState() => _EmptyWorkoutStateCardState();
-}
-
-class _EmptyWorkoutStateCardState extends State<_EmptyWorkoutStateCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _opacityAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    )..repeat(reverse: true);
-
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic),
-    );
-    
-    _opacityAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,34 +138,24 @@ class _EmptyWorkoutStateCardState extends State<_EmptyWorkoutStateCard>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _scaleAnimation.value,
-                child: Container(
-                  padding: EdgeInsets.all(20.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1 * _opacityAnimation.value),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.2 * _opacityAnimation.value),
-                        blurRadius: 16,
-                        spreadRadius: 4,
-                      )
-                    ],
+          SizedBox(
+            height: 120.h,
+            child: Lottie.asset(
+              'assets/animation/dumbell animation.json',
+              repeat: true,
+              reverse: true,
+              fit: BoxFit.contain,
+              delegates: LottieDelegates(
+                values: [
+                  ValueDelegate.color(
+                    const ['**', 'Fill 1'],
+                    value: AppColors.primary,
                   ),
-                  child: Icon(
-                    Icons.directions_run_rounded,
-                    color: AppColors.primary,
-                    size: 40.sp,
-                  ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
           Text(
             "No Workouts Yet",
             style: GoogleFonts.spaceGrotesk(

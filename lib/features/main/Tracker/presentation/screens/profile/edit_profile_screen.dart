@@ -165,7 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   fit: BoxFit.cover,
                                 )
                               : const DecorationImage(
-                                  image: AssetImage('assets/images/Ahmed_Ehab.jpg'),
+                                  image: AssetImage('assets/images/profile.png'),
                                   fit: BoxFit.cover,
                                 ),
                         ),

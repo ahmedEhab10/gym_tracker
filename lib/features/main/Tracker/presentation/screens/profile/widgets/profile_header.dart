@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_my_tracker/core/theme/app_colors.dart';
 import 'package:try_my_tracker/core/widgets/common/custom_button.dart';
 import 'package:try_my_tracker/domain/entities/profile_entity.dart';
@@ -13,11 +14,12 @@ import 'package:try_my_tracker/features/main/Tracker/presentation/screens/profil
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        String name = 'Ahmed Ehab'; // User Fallback
+        String name = 'Athlete'; // User Fallback
         String? profilePicPath;
         ProfileEntity? currentProfile;
 
@@ -54,7 +56,7 @@ class ProfileHeader extends StatelessWidget {
                             fit: BoxFit.cover,
                           )
                         : const DecorationImage(
-                            image: AssetImage('assets/images/Ahmed_Ehab.jpg'),
+                            image: AssetImage('assets/images/profile.png'),
                             fit: BoxFit.cover,
                           ),
                   ),
@@ -87,14 +89,7 @@ class ProfileHeader extends StatelessWidget {
               ),
             ),
             SizedBox(height: 4.h),
-            Text(
-              'Member since Jan 2023',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textSecondary,
-              ),
-            ),
+            _MemberSinceLabel(),
             SizedBox(height: 24.h),
             Row(
               children: [
@@ -144,6 +139,57 @@ class ProfileHeader extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _MemberSinceLabel extends StatefulWidget {
+  const _MemberSinceLabel();
+
+  @override
+  State<_MemberSinceLabel> createState() => _MemberSinceLabelState();
+}
+
+class _MemberSinceLabelState extends State<_MemberSinceLabel> {
+  String _label = 'Member since —';
+
+  static String _format(String? isoDate) {
+    if (isoDate == null) return '—';
+    final date = DateTime.tryParse(isoDate);
+    if (date == null) return '—';
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    return 'Member since ${months[date.month - 1]} ${date.year}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      if (!mounted) return;
+      var raw = prefs.getString('joined_at');
+      if (raw == null) {
+        // First time ever — save today as the join date
+        raw = DateTime.now().toIso8601String();
+        prefs.setString('joined_at', raw);
+      }
+      setState(() {
+        _label = _format(raw);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _label,
+      style: GoogleFonts.spaceGrotesk(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textSecondary,
+      ),
     );
   }
 }

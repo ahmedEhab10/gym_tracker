@@ -75,6 +75,10 @@ class _SetupScreenState extends State<SetupScreen> {
     // 1. Mark setup as complete
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('has_completed_setup', true);
+    // Save join date only once (first setup)
+    if (!prefs.containsKey('joined_at')) {
+      await prefs.setString('joined_at', DateTime.now().toIso8601String());
+    }
 
     if (!mounted) return;
 

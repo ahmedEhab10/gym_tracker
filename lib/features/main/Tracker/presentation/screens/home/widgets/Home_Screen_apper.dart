@@ -45,29 +45,22 @@ class HomeScreenApper extends StatelessWidget {
                 }
                 
                 return Container(
-                  padding: EdgeInsets.all(
-                    2.w,
-                  ), // Controls the thickness of the frame
+                  height: 55.h,
+                  width: 55.w,
                   decoration: BoxDecoration(
-                    color: AppColors.primary, // The color of the frame
-                    borderRadius: BorderRadius.circular(
-                      100,
-                    ), // Optional: rounds the corners
-                  ),
-                  child: ClipRRect(
-                    // Clips the image to match the container's rounded corners
-                    borderRadius: BorderRadius.circular(100),
-                    child: profilePicPath != null && File(profilePicPath).existsSync()
-                      ? Image.file(
-                          File(profilePicPath),
-                          width: 55.w,
-                          height: 55.h,
+                    shape: BoxShape.circle,
+                    color: AppColors.card,
+                    border: Border.all(
+                      color: AppColors.primary, 
+                      width: 2.w,
+                    ),
+                    image: profilePicPath != null && File(profilePicPath).existsSync()
+                      ? DecorationImage(
+                          image: FileImage(File(profilePicPath)),
                           fit: BoxFit.cover,
                         )
-                      : Image.asset(
-                          'assets/images/Ahmed_Ehab.jpg',
-                          width: 55.w,
-                          height: 55.h,
+                      : const DecorationImage(
+                          image: AssetImage('assets/images/profile.png'),
                           fit: BoxFit.cover,
                         ),
                   ),

@@ -46,7 +46,7 @@ class HomeScreenBody extends StatelessWidget {
                   SizedBox(height: 20.h),
                   BlocBuilder<ProfileCubit, ProfileState>(
                     builder: (context, profileState) {
-                      String firstName = 'Ahmed'; // Fallback
+                      String firstName = 'Athlete'; // Fallback
                       if (profileState is ProfileLoaded) {
                         // Extract first name (split by space and take first element)
                         firstName = profileState.profile.name.split(' ').first;

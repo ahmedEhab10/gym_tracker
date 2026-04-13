@@ -40,6 +40,11 @@ import 'package:uuid/uuid.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // ! External - Init Hive first (all data sources depend on it)
+  final hiveService = HiveService();
+  await hiveService.init();
+  sl.registerLazySingleton(() => hiveService);
+
   // ! Features - Exercise
   // Bloc
   // UseCases
@@ -209,10 +214,4 @@ Future<void> init() async {
 
   // ! Core
   sl.registerLazySingleton(() => const Uuid());
-
-  // ! External
-  // Hive Boxes registration will go here
-  final hiveService = HiveService();
-  await hiveService.init();
-  sl.registerLazySingleton(() => hiveService);
 }
