@@ -20,8 +20,7 @@ class ProfileScreenBody extends StatelessWidget {
           const ProfileHeader(),
           SizedBox(height: 32.h),
           const BodyStatsSection(),
-          SizedBox(height: 32.h),
-          const PersonalRecordsSection(),
+
           SizedBox(height: 32.h),
           const ProfileMenuList(),
           SizedBox(height: 40.h), // Bottom padding

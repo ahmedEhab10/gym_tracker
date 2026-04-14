@@ -26,12 +26,20 @@ class _MainLayoutState extends State<MainLayout> {
   void initState() {
     super.initState();
     pages = [const HomeScreen(), const SwitcerPage(), const ProfileScreen()];
+    
+    // Initial fetch of global HomeBloc
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    });
   }
 
   //WeeklyScheduleScreen()
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
     setState(() => _selectedIndex = index);
+    if (index == 0) {
+      context.read<HomeBloc>().add(LoadHomeData());
+    }
   }
 
   @override
@@ -43,9 +51,6 @@ class _MainLayoutState extends State<MainLayout> {
         ),
         BlocProvider(
           create: (context) => di.sl<ProfileCubit>()..loadProfile(),
-        ),
-        BlocProvider(
-          create: (context) => di.sl<HomeBloc>()..add(LoadHomeData()),
         ),
       ],
       child: Scaffold(
